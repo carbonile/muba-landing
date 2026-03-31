@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MUBA — The platform connecting your clinic with insurance providers</title>
+<meta name="description" content="MUBA is the cloud platform that connects patients, beds, and insurance providers in one place. Onboard residents in 5 minutes. Real-time occupancy dashboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#0EA5A0;
+  --teal-light:#14C4BE;
+  --teal-dark:#0B8682;
+  --navy:#0F1923;
+  --navy-mid:#1A2D3D;
+  --navy-light:#243B4F;
+  --gold:#F0B429;
+  --gold-light:#FCEFC7;
+  --white:#FFFFFF;
+  --off-white:#F7FAFA;
+  --gray-100:#E8EEEF;
+  --gray-200:#C8D5D7;
+  --gray-400:#7A9198;
+  --gray-600:#4A6670;
+  --gray-800:#2A3F47;
+  --red-soft:#FF6B6B;
+  --green-soft:#51CF66;
+  --blue-soft:#74C0FC;
+  --font-display:'Instrument Serif', serif;
+  --font-body:'DM Sans', sans-serif;
+  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--font-body);
+  color:var(--gray-800);
+  background:var(--off-white);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{cursor:pointer;border:none;font-family:inherit}
+
+/* ===== NAV ===== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 2rem;height:72px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(15,25,35,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(14,165,160,0.15);
+  transition:all .4s var(--ease-out-expo);
+}
+.nav.scrolled{
+  background:rgba(15,25,35,0.97);
+  box-shadow:0 4px 30px rgba(0,0,0,0.3);
+}
+.nav-logo{
+  font-family:var(--font-display);
+  font-size:1.75rem;
+  color:var(--teal-light);
+  letter-spacing:-0.02em;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.nav-logo .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--teal);
+  box-shadow:0 0 12px var(--teal);
+  animation:pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{
+  color:var(--gray-200);font-size:.875rem;font-weight:500;
+  letter-spacing:.02em;text-transform:uppercase;
+  transition:color .25s;
+  position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;
+  width:0;height:1.5px;background:var(--teal);
+  transition:width .3s var(--ease-out-expo);
+}
+.nav-links a:hover{color:var(--white)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{
+  background:var(--teal);color:var(--white);
+  padding:.625rem 1.5rem;border-radius:8px;
+  font-size:.875rem;font-weight:600;
+  transition:all .25s var(--ease-out-expo);
+  letter-spacing:.01em;
+}
+.nav-cta:hover{
+  background:var(--teal-light);
+  transform:translateY(-1px);
+  box-shadow:0 4px 20px rgba(14,165,160,0.35);
+}
+.mobile-toggle{display:none;background:none;color:var(--white);font-size:1.5rem}
+
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;
+  background:var(--navy);
+  position:relative;
+  display:flex;align-items:center;
+  padding:6rem 2rem 4rem;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;
+  top:-200px;right:-200px;
+  width:800px;height:800px;
+  background:radial-gradient(circle,rgba(14,165,160,0.12) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero::after{
+  content:'';position:absolute;
+  bottom:-100px;left:-100px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(240,180,41,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-grid{
+  max-width:1280px;margin:0 auto;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:4rem;align-items:center;
+  position:relative;z-index:1;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(14,165,160,0.1);
+  border:1px solid rgba(14,165,160,0.25);
+  border-radius:100px;padding:.375rem 1rem;
+  font-size:.8rem;color:var(--teal-light);
+  font-weight:500;letter-spacing:.03em;
+  margin-bottom:1.5rem;
+  animation:fadeUp .8s var(--ease-out-expo) both;
+}
+.hero-badge .pulse{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--teal);
+  box-shadow:0 0 8px var(--teal);
+  animation:pulse-dot 2s ease infinite;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-size:clamp(2.5rem,5vw,4rem);
+  line-height:1.08;
+  color:var(--white);
+  letter-spacing:-0.03em;
+  margin-bottom:1.5rem;
+  animation:fadeUp .8s var(--ease-out-expo) .1s both;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--teal-light);
+}
+.hero-sub{
+  font-size:1.125rem;line-height:1.7;
+  color:var(--gray-400);
+  max-width:520px;
+  margin-bottom:2.5rem;
+  animation:fadeUp .8s var(--ease-out-expo) .2s both;
+}
+.hero-actions{
+  display:flex;gap:1rem;flex-wrap:wrap;
+  animation:fadeUp .8s var(--ease-out-expo) .3s both;
+}
+.btn-primary{
+  background:var(--teal);color:var(--white);
+  padding:.875rem 2rem;border-radius:10px;
+  font-size:1rem;font-weight:600;
+  display:inline-flex;align-items:center;gap:.5rem;
+  transition:all .3s var(--ease-out-expo);
+  box-shadow:0 4px 20px rgba(14,165,160,0.25);
+}
+.btn-primary:hover{
+  background:var(--teal-light);
+  transform:translateY(-2px);
+  box-shadow:0 8px 30px rgba(14,165,160,0.35);
+}
+.btn-secondary{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  color:var(--gray-200);
+  padding:.875rem 2rem;border-radius:10px;
+  font-size:1rem;font-weight:500;
+  display:inline-flex;align-items:center;gap:.5rem;
+  transition:all .3s var(--ease-out-expo);
+}
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.1);
+  border-color:rgba(255,255,255,0.2);
+  color:var(--white);
+  transform:translateY(-2px);
+}
+.hero-visual{
+  position:relative;
+  animation:fadeUp 1s var(--ease-out-expo) .4s both;
+}
+.hero-mockup{
+  background:var(--navy-mid);
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,0.08);
+  padding:1.5rem;
+  box-shadow:0 40px 80px rgba(0,0,0,0.4),0 0 0 1px rgba(14,165,160,0.1);
+  position:relative;
+  overflow:hidden;
+}
+.mockup-topbar{
+  display:flex;align-items:center;gap:.75rem;
+  margin-bottom:1.25rem;padding-bottom:1rem;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.mockup-dots{display:flex;gap:6px}
+.mockup-dots span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12)}
+.mockup-dots span:first-child{background:var(--red-soft)}
+.mockup-dots span:nth-child(2){background:var(--gold)}
+.mockup-dots span:last-child{background:var(--green-soft)}
+.mockup-url{
+  flex:1;background:rgba(255,255,255,0.04);
+  border-radius:6px;padding:.35rem .75rem;
+  font-size:.75rem;color:var(--gray-400);
+  font-family:monospace;
+}
+.mockup-content{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.stat-card{
+  background:rgba(14,165,160,0.08);
+  border:1px solid rgba(14,165,160,0.15);
+  border-radius:10px;padding:1rem;
+  transition:transform .3s var(--ease-out-expo);
+}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-label{font-size:.7rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.375rem}
+.stat-value{font-size:1.5rem;font-weight:700;color:var(--teal-light);font-family:var(--font-display)}
+.stat-sub{font-size:.7rem;color:var(--gray-400);margin-top:.25rem}
+.bed-grid{
+  grid-column:1/-1;
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:10px;padding:1rem;
+}
+.bed-grid-label{font-size:.7rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
+.beds{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.bed{
+  aspect-ratio:1;border-radius:4px;
+  transition:all .3s;
+  position:relative;
+}
+.bed.free{background:rgba(81,207,102,0.3);border:1px solid rgba(81,207,102,0.4)}
+.bed.occupied{background:rgba(116,192,252,0.3);border:1px solid rgba(116,192,252,0.4)}
+.bed.cleaning{background:rgba(240,180,41,0.3);border:1px solid rgba(240,180,41,0.4)}
+.bed.maint{background:rgba(255,107,107,0.25);border:1px solid rgba(255,107,107,0.35)}
+.bed:hover{transform:scale(1.3);z-index:2}
+.hero-float{
+  position:absolute;
+  background:var(--navy);
+  border:1px solid rgba(14,165,160,0.2);
+  border-radius:12px;padding:.75rem 1rem;
+  box-shadow:0 12px 40px rgba(0,0,0,0.3);
+  display:flex;align-items:center;gap:.625rem;
+  animation:float 4s ease-in-out infinite;
+  z-index:2;
+}
+.hero-float.f1{top:-12px;right:-20px;animation-delay:0s}
+.hero-float.f2{bottom:40px;left:-30px;animation-delay:1.5s}
+.float-icon{
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.875rem;
+}
+.float-icon.green{background:rgba(81,207,102,0.15);color:var(--green-soft)}
+.float-icon.gold{background:rgba(240,180,41,0.15);color:var(--gold)}
+.float-text{font-size:.75rem;color:var(--gray-200);line-height:1.3}
+.float-text strong{display:block;color:var(--white);font-size:.8rem}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== TRUST BAR ===== */
+.trust-bar{
+  background:var(--navy);
+  border-top:1px solid rgba(255,255,255,0.04);
+  padding:2rem;
+}
+.trust-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:center;
+  gap:3rem;flex-wrap:wrap;
+}
+.trust-item{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.8rem;color:var(--gray-400);
+  letter-spacing:.02em;
+}
+.trust-icon{
+  width:20px;height:20px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.65rem;
+}
+.trust-icon.teal{background:rgba(14,165,160,0.15);color:var(--teal-light)}
+.trust-icon.gold{background:rgba(240,180,41,0.15);color:var(--gold)}
+
+/* ===== PROBLEMS ===== */
+.problems{
+  padding:6rem 2rem;
+  background:var(--off-white);
+  position:relative;
+}
+.problems::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gray-200),transparent);
+}
+.section-header{
+  text-align:center;max-width:640px;margin:0 auto 3.5rem;
+}
+.section-label{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.75rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;
+  color:var(--teal);margin-bottom:1rem;
+}
+.section-title{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,3.5vw,2.75rem);
+  line-height:1.15;
+  color:var(--navy);
+  letter-spacing:-0.02em;
+  margin-bottom:1rem;
+}
+.section-desc{
+  font-size:1.05rem;line-height:1.7;
+  color:var(--gray-600);
+}
+.problems-grid{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.problem-card{
+  background:var(--white);
+  border-radius:16px;
+  padding:2rem;
+  border:1px solid var(--gray-100);
+  transition:all .4s var(--ease-out-expo);
+  position:relative;
+  overflow:hidden;
+}
+.problem-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--teal-light));
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease-out-expo);
+}
+.problem-card:hover{
+  border-color:rgba(14,165,160,0.2);
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.06);
+}
+.problem-card:hover::before{transform:scaleX(1)}
+.problem-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.25rem;margin-bottom:1.25rem;
+}
+.problem-icon.red{background:rgba(255,107,107,0.1);color:var(--red-soft)}
+.problem-icon.gold{background:rgba(240,180,41,0.1);color:var(--gold)}
+.problem-icon.blue{background:rgba(116,192,252,0.1);color:var(--blue-soft)}
+.problem-card h3{
+  font-size:1.125rem;font-weight:600;
+  color:var(--navy);margin-bottom:.75rem;
+}
+.problem-card p{
+  font-size:.925rem;line-height:1.65;
+  color:var(--gray-600);
+}
+
+/* ===== FEATURES ===== */
+.features{
+  padding:6rem 2rem;
+  background:var(--navy);
+  position:relative;
+  overflow:hidden;
+}
+.features::before{
+  content:'';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  width:1000px;height:1000px;
+  background:radial-gradient(circle,rgba(14,165,160,0.06) 0%,transparent 60%);
+  pointer-events:none;
+}
+.features .section-label{color:var(--teal-light)}
+.features .section-title{color:var(--white)}
+.features .section-desc{color:var(--gray-400)}
+.features-grid{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+  position:relative;z-index:1;
+}
+.feature-card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.07);
+  border-radius:16px;
+  padding:2rem;
+  transition:all .4s var(--ease-out-expo);
+  position:relative;
+  overflow:hidden;
+}
+.feature-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:3px;border-radius:3px 3px 0 0;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .4s var(--ease-out-expo);
+}
+.feature-card.teal-accent::after{background:var(--teal)}
+.feature-card.gold-accent::after{background:var(--gold)}
+.feature-card.blue-accent::after{background:var(--blue-soft)}
+.feature-card:hover{
+  background:rgba(255,255,255,0.06);
+  border-color:rgba(255,255,255,0.12);
+  transform:translateY(-4px);
+}
+.feature-card:hover::after{transform:scaleX(1)}
+.feature-emoji{font-size:2rem;margin-bottom:1.25rem;display:block}
+.feature-card h3{
+  font-size:1.2rem;font-weight:600;
+  color:var(--white);margin-bottom:.75rem;
+}
+.feature-card p{
+  font-size:.9rem;line-height:1.65;
+  color:var(--gray-400);margin-bottom:1.25rem;
+}
+.feature-list{list-style:none}
+.feature-list li{
+  font-size:.825rem;color:var(--gray-200);
+  padding:.375rem 0;
+  display:flex;align-items:flex-start;gap:.5rem;
+  border-top:1px solid rgba(255,255,255,0.04);
+}
+.feature-list li::before{
+  content:'✓';color:var(--teal);font-weight:700;
+  flex-shrink:0;margin-top:1px;
+}
+
+/* ===== HOW IT WORKS ===== */
+.how{
+  padding:6rem 2rem;
+  background:var(--off-white);
+  position:relative;
+}
+.steps{
+  max-width:960px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2rem;
+  position:relative;
+}
+.steps::before{
+  content:'';position:absolute;
+  top:36px;left:calc(16.66% + 24px);
+  right:calc(16.66% + 24px);
+  height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--gold));
+  z-index:0;
+}
+.step{
+  text-align:center;position:relative;z-index:1;
+}
+.step-num{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--white);
+  border:2px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);
+  font-size:1.75rem;color:var(--teal);
+  margin:0 auto 1.25rem;
+  box-shadow:0 8px 30px rgba(14,165,160,0.12);
+  transition:all .3s var(--ease-out-expo);
+}
+.step:hover .step-num{
+  background:var(--teal);color:var(--white);
+  transform:scale(1.08);
+  box-shadow:0 12px 40px rgba(14,165,160,0.25);
+}
+.step h3{
+  font-size:1.05rem;font-weight:600;
+  color:var(--navy);margin-bottom:.5rem;
+}
+.step p{
+  font-size:.875rem;line-height:1.6;
+  color:var(--gray-600);
+}
+
+/* ===== STATS SECTION ===== */
+.stats{
+  padding:4rem 2rem;
+  background:var(--navy);
+}
+.stats-grid{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;
+}
+.stat-block{text-align:center;padding:1.5rem}
+.stat-block .num{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,4vw,3rem);
+  color:var(--teal-light);
+  line-height:1;
+  margin-bottom:.5rem;
+}
+.stat-block .label{
+  font-size:.85rem;color:var(--gray-400);
+  line-height:1.4;
+}
+
+/* ===== PRICING ===== */
+.pricing{
+  padding:6rem 2rem;
+  background:var(--off-white);
+}
+.pricing-cards{
+  max-width:960px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
+}
+.price-card{
+  background:var(--white);
+  border:1px solid var(--gray-100);
+  border-radius:16px;
+  padding:2rem;
+  text-align:center;
+  transition:all .4s var(--ease-out-expo);
+  position:relative;
+}
+.price-card.featured{
+  border-color:var(--teal);
+  box-shadow:0 20px 60px rgba(14,165,160,0.12);
+  transform:scale(1.04);
+}
+.price-card.featured::before{
+  content:'Most popular';
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--teal);color:var(--white);
+  font-size:.7rem;font-weight:700;
+  padding:.25rem 1rem;border-radius:100px;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.price-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.08);
+}
+.price-card.featured:hover{transform:scale(1.04) translateY(-4px)}
+.price-tier{
+  font-size:.8rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--teal);margin-bottom:.5rem;
+}
+.price-beds{
+  font-size:.85rem;color:var(--gray-600);
+  margin-bottom:1.25rem;
+}
+.price-amount{
+  font-family:var(--font-display);
+  font-size:2.5rem;color:var(--navy);
+  line-height:1;margin-bottom:.25rem;
+}
+.price-period{font-size:.8rem;color:var(--gray-400);margin-bottom:1.5rem}
+.price-features{
+  list-style:none;text-align:left;
+  margin-bottom:1.5rem;
+}
+.price-features li{
+  font-size:.825rem;color:var(--gray-600);
+  padding:.4rem 0;
+  display:flex;align-items:center;gap:.5rem;
+}
+.price-features li::before{content:'✓';color:var(--teal);font-weight:700;font-size:.75rem}
+.price-btn{
+  width:100%;padding:.75rem;border-radius:10px;
+  font-size:.875rem;font-weight:600;
+  transition:all .3s var(--ease-out-expo);
+}
+.price-btn.primary{
+  background:var(--teal);color:var(--white);
+  box-shadow:0 4px 16px rgba(14,165,160,0.2);
+}
+.price-btn.primary:hover{background:var(--teal-light);transform:translateY(-1px)}
+.price-btn.outline{
+  background:transparent;color:var(--teal);
+  border:1.5px solid var(--teal);
+}
+.price-btn.outline:hover{background:rgba(14,165,160,0.05)}
+
+/* ===== CTA SECTION ===== */
+.cta-section{
+  padding:6rem 2rem;
+  background:var(--navy);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(14,165,160,0.1) 0%,transparent 60%);
+  pointer-events:none;
+}
+.cta-inner{
+  max-width:640px;margin:0 auto;
+  position:relative;z-index:1;
+}
+.cta-section h2{
+  font-family:var(--font-display);
+  font-size:clamp(2rem,4vw,2.75rem);
+  color:var(--white);
+  margin-bottom:1rem;
+  letter-spacing:-0.02em;
+}
+.cta-section p{
+  font-size:1.05rem;line-height:1.7;
+  color:var(--gray-400);
+  margin-bottom:2rem;
+}
+.cta-form{
+  display:flex;gap:.75rem;
+  max-width:480px;margin:0 auto 1rem;
+}
+.cta-input{
+  flex:1;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:10px;
+  padding:.875rem 1.25rem;
+  color:var(--white);
+  font-family:var(--font-body);
+  font-size:.95rem;
+  outline:none;
+  transition:border-color .25s;
+}
+.cta-input::placeholder{color:var(--gray-400)}
+.cta-input:focus{border-color:var(--teal)}
+.cta-submit{
+  background:var(--teal);color:var(--white);
+  padding:.875rem 1.75rem;border-radius:10px;
+  font-size:.95rem;font-weight:600;
+  transition:all .3s var(--ease-out-expo);
+  white-space:nowrap;
+}
+.cta-submit:hover{
+  background:var(--teal-light);
+  transform:translateY(-1px);
+}
+.cta-note{
+  font-size:.8rem;color:var(--gray-400);
+}
+.whatsapp-btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  margin-top:1.5rem;
+  background:rgba(37,211,102,0.12);
+  border:1px solid rgba(37,211,102,0.25);
+  color:#25D366;
+  padding:.625rem 1.25rem;border-radius:10px;
+  font-size:.875rem;font-weight:500;
+  transition:all .3s var(--ease-out-expo);
+}
+.whatsapp-btn:hover{
+  background:rgba(37,211,102,0.2);
+  transform:translateY(-1px);
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  background:var(--navy);
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:3rem 2rem 2rem;
+}
+.footer-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1.5rem;
+}
+.footer-logo{
+  font-family:var(--font-display);
+  font-size:1.25rem;color:var(--teal-light);
+}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{
+  font-size:.8rem;color:var(--gray-400);
+  transition:color .25s;
+}
+.footer-links a:hover{color:var(--teal-light)}
+.footer-copy{
+  width:100%;text-align:center;
+  padding-top:1.5rem;
+  border-top:1px solid rgba(255,255,255,0.04);
+  margin-top:1rem;
+  font-size:.75rem;color:var(--gray-400);
+}
+
+/* ===== SCROLL ANIMATIONS ===== */
+.reveal{
+  opacity:0;transform:translateY(30px);
+  transition:all .8s var(--ease-out-expo);
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:1024px){
+  .hero-grid{grid-template-columns:1fr;gap:3rem;text-align:center}
+  .hero-sub{margin:0 auto 2.5rem}
+  .hero-actions{justify-content:center}
+  .hero-visual{max-width:560px;margin:0 auto}
+  .hero-float{display:none}
+  .features-grid,.problems-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-cards{grid-template-columns:1fr;max-width:400px}
+  .price-card.featured{transform:none}
+  .price-card.featured:hover{transform:translateY(-4px)}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-toggle{display:block}
+  .features-grid,.problems-grid{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;gap:2.5rem}
+  .steps::before{display:none}
+  .cta-form{flex-direction:column}
+  .hero{padding:7rem 1.5rem 3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo"><span class="dot"></span> MUBA</a>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#modules">Modules</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#demo" class="nav-cta">Request demo</a>
+  </div>
+  <button class="mobile-toggle" aria-label="Menu">☰</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge"><span class="pulse"></span> Cloud platform for healthcare institutions</div>
+      <h1>Run your nursing home <em>without spreadsheets</em></h1>
+      <p class="hero-sub">MUBA connects patients, beds, and insurance providers in one platform. Onboard residents in 5 minutes. Real-time occupancy dashboard. No installation required.</p>
+      <div class="hero-actions">
+        <a href="#demo" class="btn-primary">
+          Request a free demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#modules" class="btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5l4 2.5-4 2.5V5.5z" fill="currentColor"/></svg>
+          See the product
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-float f1">
+        <div class="float-icon green">✓</div>
+        <div class="float-text"><strong>New resident</strong>Onboarded in 4:32</div>
+      </div>
+      <div class="hero-float f2">
+        <div class="float-icon gold">⚡</div>
+        <div class="float-text"><strong>Coverage verified</strong>OSDE Plan 310</div>
+      </div>
+      <div class="hero-mockup">
+        <div class="mockup-topbar">
+          <div class="mockup-dots"><span></span><span></span><span></span></div>
+          <div class="mockup-url">muba.app/dashboard</div>
+        </div>
+        <div class="mockup-content">
+          <div class="stat-card">
+            <div class="stat-label">Active residents</div>
+            <div class="stat-value">47</div>
+            <div class="stat-sub">+3 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Occupancy</div>
+            <div class="stat-value">78%</div>
+            <div class="stat-sub">47 of 60 beds</div>
+          </div>
+          <div class="bed-grid">
+            <div class="bed-grid-label">Bed map — Floor 1</div>
+            <div class="beds" id="beds"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="trust-icon teal">🔒</span> Ley 25.326 compliant</div>
+    <div class="trust-item"><span class="trust-icon teal">☁️</span> SaaS multi-tenant</div>
+    <div class="trust-item"><span class="trust-icon gold">⚡</span> Go-live in weeks</div>
+    <div class="trust-item"><span class="trust-icon teal">🏥</span> 20–200 beds</div>
+    <div class="trust-item"><span class="trust-icon gold">🎓</span> Built at ETH Zürich</div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<section class="problems" id="problem">
+  <div class="section-header">
+    <div class="section-label">⎯ The problem</div>
+    <h2 class="section-title">Nursing homes deserve better technology</h2>
+    <p class="section-desc">Today you manage patients in Excel, track coverage in a notebook, and remember bed assignments from memory. Existing systems are built for large hospitals.</p>
+  </div>
+  <div class="problems-grid">
+    <div class="problem-card reveal">
+      <div class="problem-icon red">📋</div>
+      <h3>Manual processes</h3>
+      <p>Admissions, beds, and insurance coverage tracked on Excel or paper. High error rates, no audit trail, no traceability. Hours wasted on tasks that should take minutes.</p>
+    </div>
+    <div class="problem-card reveal reveal-delay-1">
+      <div class="problem-icon gold">🏗️</div>
+      <h3>Oversized software</h3>
+      <p>Existing systems are designed for 500+ bed hospitals. Expensive (USD 50K–200K), complex to deploy, and packed with features you'll never use.</p>
+    </div>
+    <div class="problem-card reveal reveal-delay-2">
+      <div class="problem-icon blue">🔗</div>
+      <h3>No payer connectivity</h3>
+      <p>Billing to insurance providers, coverage verification, and collections tracking are disconnected from daily operations. You lose revenue on uncollected claims.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="modules">
+  <div class="section-header">
+    <div class="section-label">⎯ MVP Modules</div>
+    <h2 class="section-title">Three modules, one system</h2>
+    <p class="section-desc">Everything you need to operate your nursing home or clinic from Day 1. Fully functional, no complex implementation.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card teal-accent reveal">
+      <span class="feature-emoji">👤</span>
+      <h3>Residents / Patients</h3>
+      <p>Manage each resident with a complete profile and an onboarding process that takes less than 5 minutes.</p>
+      <ul class="feature-list">
+        <li>Simplified 3-step admission</li>
+        <li>Full profile with 7 tabs</li>
+        <li>Statuses: Active · Absent · Discharged · Deceased</li>
+        <li>Completeness indicator (0–100%)</li>
+        <li>Full history of movements</li>
+      </ul>
+    </div>
+    <div class="feature-card gold-accent reveal reveal-delay-1">
+      <span class="feature-emoji">🏛️</span>
+      <h3>Payers / Insurance Providers</h3>
+      <p>Master catalog of insurance providers with plans, coverage, and agreements. All connected to your residents.</p>
+      <ul class="feature-list">
+        <li>Plan and coverage management</li>
+        <li>Agreements with validity dates and rates</li>
+        <li>Expiration alerts at 30 days</li>
+        <li>Unique tax ID validation</li>
+        <li>Accidental deletion protection</li>
+      </ul>
+    </div>
+    <div class="feature-card blue-accent reveal reveal-delay-2">
+      <span class="feature-emoji">🛏️</span>
+      <h3>Beds &amp; Occupancy</h3>
+      <p>Visual real-time occupancy dashboard. Always know exactly how many beds are available.</p>
+      <ul class="feature-list">
+        <li>Hierarchy: Building → Floor → Room → Bed</li>
+        <li>Real-time occupancy dashboard</li>
+        <li>States: Free · Occupied · Cleaning · Maintenance</li>
+        <li>Assignment with full audit trail</li>
+        <li>30-second refresh rate</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how-it-works">
+  <div class="section-header">
+    <div class="section-label">⎯ How it works</div>
+    <h2 class="section-title">From Excel to MUBA in days</h2>
+    <p class="section-desc">No installation, no long contracts, no infrastructure investment. Start operating in less than a week.</p>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <h3>Configure your facility</h3>
+      <p>We create your account and set up buildings, floors, rooms, and beds. All in a single assisted setup session.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">2</div>
+      <h3>Import your data</h3>
+      <p>Upload residents and connect your insurance providers. Assisted migration from Excel or manual entry in minutes.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">3</div>
+      <h3>Operate with MUBA</h3>
+      <p>Real-time dashboard, 5-minute admissions, expiration alerts. All from your browser, on any device.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat-block reveal">
+      <div class="num">&lt;5 min</div>
+      <div class="label">Resident onboarding time</div>
+    </div>
+    <div class="stat-block reveal reveal-delay-1">
+      <div class="num">300+</div>
+      <div class="label">Insurance providers in Argentina</div>
+    </div>
+    <div class="stat-block reveal reveal-delay-2">
+      <div class="num">30s</div>
+      <div class="label">Occupancy refresh rate</div>
+    </div>
+    <div class="stat-block reveal reveal-delay-3">
+      <div class="num">0</div>
+      <div class="label">Installation required</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-header">
+    <div class="section-label">⎯ Pricing</div>
+    <h2 class="section-title">Simple, transparent, affordable</h2>
+    <p class="section-desc">No setup cost during launch. Fixed monthly price, no surprises. 15% discount on annual plans.</p>
+  </div>
+  <div class="pricing-cards">
+    <div class="price-card reveal">
+      <div class="price-tier">Starter</div>
+      <div class="price-beds">20–50 beds</div>
+      <div class="price-amount">$150</div>
+      <div class="price-period">USD / month</div>
+      <ul class="price-features">
+        <li>All 3 modules included</li>
+        <li>Up to 3 users</li>
+        <li>Email support</li>
+        <li>Cloud-hosted data</li>
+      </ul>
+      <button class="price-btn outline">Start free</button>
+    </div>
+    <div class="price-card featured reveal reveal-delay-1">
+      <div class="price-tier">Growth</div>
+      <div class="price-beds">51–100 beds</div>
+      <div class="price-amount">$300</div>
+      <div class="price-period">USD / month</div>
+      <ul class="price-features">
+        <li>Everything in Starter</li>
+        <li>Up to 10 users</li>
+        <li>Priority support</li>
+        <li>Advanced dashboard</li>
+        <li>Exportable reports</li>
+      </ul>
+      <button class="price-btn primary">Start free</button>
+    </div>
+    <div class="price-card reveal reveal-delay-2">
+      <div class="price-tier">Pro</div>
+      <div class="price-beds">101–200 beds</div>
+      <div class="price-amount">$400</div>
+      <div class="price-period">USD / month</div>
+      <ul class="price-features">
+        <li>Everything in Growth</li>
+        <li>Unlimited users</li>
+        <li>API access</li>
+        <li>Dedicated onboarding</li>
+        <li>Guaranteed SLA</li>
+      </ul>
+      <button class="price-btn outline">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="demo">
+  <div class="cta-inner">
+    <h2>Start free today</h2>
+    <p>No credit card required. Your nursing home running on MUBA in less than a week. Request a personalized demo and we'll show you how.</p>
+    <div class="cta-form">
+      <input type="email" class="cta-input" placeholder="Your professional email">
+      <button class="cta-submit">Get my demo</button>
+    </div>
+    <div class="cta-note">We'll reach out within 24 hours</div>
+    <a href="https://wa.me/5491100000000?text=Hi%2C%20I'd%20like%20to%20learn%20about%20MUBA" class="whatsapp-btn" target="_blank">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Talk to sales on WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">MUBA</div>
+    <div class="footer-links">
+      <a href="#modules">Product</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#demo">Demo</a>
+      <a href="mailto:hola@muba.app">hola@muba.app</a>
+    </div>
+    <div class="footer-copy">© 2026 MUBA. All rights reserved. Made with ❤️ in Buenos Aires & Zürich.</div>
+  </div>
+</footer>
+
+<script>
+// Bed grid
+const bedsEl = document.getElementById('beds');
+const bedStates = ['occupied','occupied','occupied','free','occupied','occupied','cleaning','occupied','free','occupied',
+  'occupied','free','occupied','occupied','occupied','maint','occupied','occupied','free','occupied',
+  'occupied','occupied','free','occupied','occupied','occupied','occupied','free','occupied','occupied',
+  'free','occupied','occupied','occupied','free','cleaning','occupied','occupied','occupied','occupied',
+  'occupied','free','free','occupied','occupied','occupied','free','occupied','free','occupied',
+  'occupied','occupied','occupied','free','occupied','occupied','occupied','free','free','occupied'];
+bedStates.forEach(s => {
+  const div = document.createElement('div');
+  div.className = `bed ${s}`;
+  bedsEl.appendChild(div);
+});
+
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+revealEls.forEach(el => observer.observe(el));
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Mobile menu toggle
+document.querySelector('.mobile-toggle').addEventListener('click', function() {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '72px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.background = 'rgba(15,25,35,0.97)';
+    links.style.padding = '1.5rem 2rem';
+    links.style.gap = '1.25rem';
+    links.style.borderBottom = '1px solid rgba(14,165,160,0.15)';
+  }
+});
+</script>
+</body>
+</html>
