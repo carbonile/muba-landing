@@ -3,737 +3,619 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MUBA — The platform connecting your clinic with insurance providers</title>
-<meta name="description" content="MUBA is the cloud platform that connects patients, beds, and insurance providers in one place. Onboard residents in 5 minutes. Real-time occupancy dashboard.">
+<title>MUBA — The Operating Layer for Healthcare in Latin America</title>
+<meta name="description" content="MUBA centralizes scheduling, records, billing, and insurer workflows for small and mid-size health clinics in Argentina. Built for how clinics actually work.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --teal:#0EA5A0;
-  --teal-light:#14C4BE;
-  --teal-dark:#0B8682;
-  --navy:#0F1923;
-  --navy-mid:#1A2D3D;
-  --navy-light:#243B4F;
-  --gold:#F0B429;
-  --gold-light:#FCEFC7;
+  --blue-deep:#0A2540;
+  --blue-mid:#1A3F6F;
+  --blue-bright:#1D72B8;
+  --teal:#00A99D;
+  --teal-light:#00C9BC;
+  --teal-pale:#E6F7F6;
+  --sky:#EBF4FB;
   --white:#FFFFFF;
-  --off-white:#F7FAFA;
-  --gray-100:#E8EEEF;
-  --gray-200:#C8D5D7;
-  --gray-400:#7A9198;
-  --gray-600:#4A6670;
-  --gray-800:#2A3F47;
-  --red-soft:#FF6B6B;
-  --green-soft:#51CF66;
-  --blue-soft:#74C0FC;
-  --font-display:'Instrument Serif', serif;
-  --font-body:'DM Sans', sans-serif;
-  --ease-out-expo:cubic-bezier(0.16,1,0.3,1);
+  --off-white:#F7FAFB;
+  --gray-100:#EEF2F5;
+  --gray-200:#D4DCE5;
+  --gray-400:#8FA5BB;
+  --gray-600:#4A6780;
+  --gray-800:#1E3347;
+  --gold:#E8A020;
+  --red-soft:#E05252;
+  --green:#2DA66C;
+  --font-body:'Sora', sans-serif;
+  --font-display:'Lora', serif;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --shadow-sm:0 2px 8px rgba(10,37,64,0.08);
+  --shadow-md:0 8px 32px rgba(10,37,64,0.12);
+  --shadow-lg:0 24px 64px rgba(10,37,64,0.15);
 }
+
 html{scroll-behavior:smooth;font-size:16px}
-body{
-  font-family:var(--font-body);
-  color:var(--gray-800);
-  background:var(--off-white);
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+body{font-family:var(--font-body);color:var(--gray-800);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 button{cursor:pointer;border:none;font-family:inherit}
 
-/* ===== NAV ===== */
+/* ── NAV ── */
 .nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 2rem;height:72px;
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:68px;padding:0 2.5rem;
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(15,25,35,0.92);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(14,165,160,0.15);
-  transition:all .4s var(--ease-out-expo);
+  background:rgba(255,255,255,0.96);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--gray-100);
+  transition:box-shadow .3s var(--ease);
 }
-.nav.scrolled{
-  background:rgba(15,25,35,0.97);
-  box-shadow:0 4px 30px rgba(0,0,0,0.3);
-}
+.nav.scrolled{box-shadow:var(--shadow-sm)}
 .nav-logo{
-  font-family:var(--font-display);
-  font-size:1.75rem;
-  color:var(--teal-light);
-  letter-spacing:-0.02em;
-  display:flex;align-items:center;gap:0.5rem;
+  display:flex;align-items:center;gap:.625rem;
+  font-family:var(--font-body);font-weight:700;font-size:1.4rem;
+  color:var(--blue-deep);letter-spacing:-.03em;
 }
-.nav-logo .dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--teal);
-  box-shadow:0 0 12px var(--teal);
-  animation:pulse-dot 2s ease infinite;
-}
-@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
+.nav-logo svg{width:32px;height:32px}
 .nav-links{display:flex;align-items:center;gap:2rem}
 .nav-links a{
-  color:var(--gray-200);font-size:.875rem;font-weight:500;
-  letter-spacing:.02em;text-transform:uppercase;
-  transition:color .25s;
-  position:relative;
+  font-size:.8rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--gray-600);transition:color .2s;
 }
-.nav-links a::after{
-  content:'';position:absolute;bottom:-4px;left:0;
-  width:0;height:1.5px;background:var(--teal);
-  transition:width .3s var(--ease-out-expo);
+.nav-links a:hover{color:var(--blue-deep)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.btn-ghost{
+  font-size:.85rem;font-weight:600;color:var(--blue-bright);
+  padding:.5rem 1rem;border-radius:8px;
+  border:1.5px solid var(--blue-bright);
+  transition:all .2s var(--ease);
 }
-.nav-links a:hover{color:var(--white)}
-.nav-links a:hover::after{width:100%}
-.nav-cta{
-  background:var(--teal);color:var(--white);
-  padding:.625rem 1.5rem;border-radius:8px;
-  font-size:.875rem;font-weight:600;
-  transition:all .25s var(--ease-out-expo);
-  letter-spacing:.01em;
+.btn-ghost:hover{background:var(--sky);border-color:var(--blue-mid)}
+.btn-filled{
+  font-size:.85rem;font-weight:600;color:var(--white);
+  background:var(--teal);
+  padding:.55rem 1.25rem;border-radius:8px;
+  transition:all .25s var(--ease);
+  box-shadow:0 2px 12px rgba(0,169,157,0.25);
 }
-.nav-cta:hover{
-  background:var(--teal-light);
-  transform:translateY(-1px);
-  box-shadow:0 4px 20px rgba(14,165,160,0.35);
-}
-.mobile-toggle{display:none;background:none;color:var(--white);font-size:1.5rem}
+.btn-filled:hover{background:var(--teal-light);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,169,157,0.35)}
+.mobile-toggle{display:none;background:none;color:var(--blue-deep);font-size:1.5rem;padding:.25rem}
 
-/* ===== HERO ===== */
+/* ── HERO ── */
 .hero{
   min-height:100vh;
-  background:var(--navy);
+  background:var(--blue-deep);
   position:relative;
   display:flex;align-items:center;
-  padding:6rem 2rem 4rem;
+  padding:7rem 2.5rem 5rem;
   overflow:hidden;
 }
-.hero::before{
-  content:'';position:absolute;
-  top:-200px;right:-200px;
-  width:800px;height:800px;
-  background:radial-gradient(circle,rgba(14,165,160,0.12) 0%,transparent 70%);
-  pointer-events:none;
-}
+/* diagonal split */
 .hero::after{
-  content:'';position:absolute;
-  bottom:-100px;left:-100px;
-  width:500px;height:500px;
-  background:radial-gradient(circle,rgba(240,180,41,0.06) 0%,transparent 70%);
+  content:'';
+  position:absolute;bottom:0;right:0;
+  width:55%;height:100%;
+  background:linear-gradient(160deg, #0d2e52 0%, #0e3d60 40%, #0a3353 100%);
+  clip-path:polygon(12% 0, 100% 0, 100% 100%, 0% 100%);
   pointer-events:none;
 }
-.hero-grid{
+/* subtle grid overlay */
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-inner{
   max-width:1280px;margin:0 auto;width:100%;
   display:grid;grid-template-columns:1fr 1fr;
-  gap:4rem;align-items:center;
+  gap:5rem;align-items:center;
   position:relative;z-index:1;
 }
-.hero-badge{
+.hero-tag{
   display:inline-flex;align-items:center;gap:.5rem;
-  background:rgba(14,165,160,0.1);
-  border:1px solid rgba(14,165,160,0.25);
-  border-radius:100px;padding:.375rem 1rem;
-  font-size:.8rem;color:var(--teal-light);
-  font-weight:500;letter-spacing:.03em;
+  background:rgba(0,169,157,0.12);
+  border:1px solid rgba(0,169,157,0.3);
+  border-radius:100px;padding:.35rem 1rem;
+  font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--teal-light);
   margin-bottom:1.5rem;
-  animation:fadeUp .8s var(--ease-out-expo) both;
+  opacity:0;animation:fadeUp .8s var(--ease) .1s forwards;
 }
-.hero-badge .pulse{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--teal);
-  box-shadow:0 0 8px var(--teal);
-  animation:pulse-dot 2s ease infinite;
-}
+.hero-tag .dot{width:6px;height:6px;border-radius:50%;background:var(--teal-light);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hero h1{
   font-family:var(--font-display);
-  font-size:clamp(2.5rem,5vw,4rem);
-  line-height:1.08;
+  font-size:clamp(2.6rem,4.5vw,3.8rem);
+  line-height:1.1;
   color:var(--white);
-  letter-spacing:-0.03em;
+  letter-spacing:-.02em;
   margin-bottom:1.5rem;
-  animation:fadeUp .8s var(--ease-out-expo) .1s both;
+  opacity:0;animation:fadeUp .8s var(--ease) .2s forwards;
 }
-.hero h1 em{
-  font-style:italic;
-  color:var(--teal-light);
-}
+.hero h1 em{font-style:italic;color:var(--teal-light)}
 .hero-sub{
-  font-size:1.125rem;line-height:1.7;
+  font-size:1.05rem;line-height:1.75;
   color:var(--gray-400);
-  max-width:520px;
+  max-width:500px;
   margin-bottom:2.5rem;
-  animation:fadeUp .8s var(--ease-out-expo) .2s both;
+  opacity:0;animation:fadeUp .8s var(--ease) .3s forwards;
 }
 .hero-actions{
   display:flex;gap:1rem;flex-wrap:wrap;
-  animation:fadeUp .8s var(--ease-out-expo) .3s both;
+  opacity:0;animation:fadeUp .8s var(--ease) .4s forwards;
 }
-.btn-primary{
+.hero-btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
   background:var(--teal);color:var(--white);
-  padding:.875rem 2rem;border-radius:10px;
-  font-size:1rem;font-weight:600;
+  padding:.9rem 2rem;border-radius:10px;
+  font-size:.95rem;font-weight:600;
+  box-shadow:0 4px 24px rgba(0,169,157,0.3);
+  transition:all .3s var(--ease);
+}
+.hero-btn-primary:hover{background:var(--teal-light);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,169,157,0.4)}
+.hero-btn-secondary{
   display:inline-flex;align-items:center;gap:.5rem;
-  transition:all .3s var(--ease-out-expo);
-  box-shadow:0 4px 20px rgba(14,165,160,0.25);
+  background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.8);
+  padding:.9rem 2rem;border-radius:10px;
+  font-size:.95rem;font-weight:500;
+  transition:all .3s var(--ease);
 }
-.btn-primary:hover{
-  background:var(--teal-light);
-  transform:translateY(-2px);
-  box-shadow:0 8px 30px rgba(14,165,160,0.35);
-}
-.btn-secondary{
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  color:var(--gray-200);
-  padding:.875rem 2rem;border-radius:10px;
-  font-size:1rem;font-weight:500;
-  display:inline-flex;align-items:center;gap:.5rem;
-  transition:all .3s var(--ease-out-expo);
-}
-.btn-secondary:hover{
-  background:rgba(255,255,255,0.1);
-  border-color:rgba(255,255,255,0.2);
-  color:var(--white);
-  transform:translateY(-2px);
-}
-.hero-visual{
-  position:relative;
-  animation:fadeUp 1s var(--ease-out-expo) .4s both;
-}
-.hero-mockup{
-  background:var(--navy-mid);
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,0.08);
-  padding:1.5rem;
-  box-shadow:0 40px 80px rgba(0,0,0,0.4),0 0 0 1px rgba(14,165,160,0.1);
-  position:relative;
-  overflow:hidden;
-}
-.mockup-topbar{
-  display:flex;align-items:center;gap:.75rem;
-  margin-bottom:1.25rem;padding-bottom:1rem;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-}
-.mockup-dots{display:flex;gap:6px}
-.mockup-dots span{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12)}
-.mockup-dots span:first-child{background:var(--red-soft)}
-.mockup-dots span:nth-child(2){background:var(--gold)}
-.mockup-dots span:last-child{background:var(--green-soft)}
-.mockup-url{
-  flex:1;background:rgba(255,255,255,0.04);
-  border-radius:6px;padding:.35rem .75rem;
-  font-size:.75rem;color:var(--gray-400);
-  font-family:monospace;
-}
-.mockup-content{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.stat-card{
-  background:rgba(14,165,160,0.08);
-  border:1px solid rgba(14,165,160,0.15);
-  border-radius:10px;padding:1rem;
-  transition:transform .3s var(--ease-out-expo);
-}
-.stat-card:hover{transform:translateY(-2px)}
-.stat-label{font-size:.7rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.375rem}
-.stat-value{font-size:1.5rem;font-weight:700;color:var(--teal-light);font-family:var(--font-display)}
-.stat-sub{font-size:.7rem;color:var(--gray-400);margin-top:.25rem}
-.bed-grid{
-  grid-column:1/-1;
-  background:rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.06);
-  border-radius:10px;padding:1rem;
-}
-.bed-grid-label{font-size:.7rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem}
-.beds{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
-.bed{
-  aspect-ratio:1;border-radius:4px;
-  transition:all .3s;
-  position:relative;
-}
-.bed.free{background:rgba(81,207,102,0.3);border:1px solid rgba(81,207,102,0.4)}
-.bed.occupied{background:rgba(116,192,252,0.3);border:1px solid rgba(116,192,252,0.4)}
-.bed.cleaning{background:rgba(240,180,41,0.3);border:1px solid rgba(240,180,41,0.4)}
-.bed.maint{background:rgba(255,107,107,0.25);border:1px solid rgba(255,107,107,0.35)}
-.bed:hover{transform:scale(1.3);z-index:2}
-.hero-float{
-  position:absolute;
-  background:var(--navy);
-  border:1px solid rgba(14,165,160,0.2);
-  border-radius:12px;padding:.75rem 1rem;
-  box-shadow:0 12px 40px rgba(0,0,0,0.3);
-  display:flex;align-items:center;gap:.625rem;
-  animation:float 4s ease-in-out infinite;
-  z-index:2;
-}
-.hero-float.f1{top:-12px;right:-20px;animation-delay:0s}
-.hero-float.f2{bottom:40px;left:-30px;animation-delay:1.5s}
-.float-icon{
-  width:32px;height:32px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.875rem;
-}
-.float-icon.green{background:rgba(81,207,102,0.15);color:var(--green-soft)}
-.float-icon.gold{background:rgba(240,180,41,0.15);color:var(--gold)}
-.float-text{font-size:.75rem;color:var(--gray-200);line-height:1.3}
-.float-text strong{display:block;color:var(--white);font-size:.8rem}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hero-btn-secondary:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);color:var(--white)}
 
-/* ===== TRUST BAR ===== */
-.trust-bar{
-  background:var(--navy);
-  border-top:1px solid rgba(255,255,255,0.04);
-  padding:2rem;
+/* hero dashboard mockup */
+.hero-visual{
+  opacity:0;animation:fadeUp 1s var(--ease) .5s forwards;
+  position:relative;
+}
+.dashboard{
+  background:#fff;border-radius:16px;
+  box-shadow:0 32px 80px rgba(0,0,0,0.35),0 0 0 1px rgba(255,255,255,0.06);
+  overflow:hidden;font-size:.78rem;
+}
+.dash-topbar{
+  background:#F8FAFC;
+  border-bottom:1px solid #E4ECF2;
+  padding:.6rem 1rem;
+  display:flex;align-items:center;gap:.5rem;
+}
+.dash-dots{display:flex;gap:5px}
+.dash-dots span{width:9px;height:9px;border-radius:50%}
+.dash-dots span:nth-child(1){background:#FC5F57}
+.dash-dots span:nth-child(2){background:#FDBC2C}
+.dash-dots span:nth-child(3){background:#33C748}
+.dash-url{flex:1;background:#EEF2F5;border-radius:4px;padding:.2rem .6rem;font-size:.68rem;color:var(--gray-400);font-family:monospace}
+.dash-body{display:grid;grid-template-columns:160px 1fr}
+.dash-sidebar{
+  background:#F0F5F9;border-right:1px solid #E4ECF2;
+  padding:.75rem .5rem;
+}
+.dash-logo{font-weight:700;font-size:.85rem;color:var(--blue-deep);padding:.25rem .5rem .75rem;letter-spacing:-.02em;display:flex;align-items:center;gap:.4rem}
+.dash-logo-hex{width:18px;height:18px;background:var(--teal);border-radius:4px}
+.dash-clinic{font-size:.62rem;color:var(--gray-400);padding:0 .5rem .5rem;border-bottom:1px solid #DDE5ED;margin-bottom:.5rem}
+.dash-clinic strong{display:block;font-size:.7rem;color:var(--gray-600);font-weight:600}
+.dash-nav-item{
+  display:flex;align-items:center;gap:.4rem;
+  padding:.35rem .5rem;border-radius:6px;
+  font-size:.68rem;color:var(--gray-600);font-weight:500;
+  margin-bottom:.125rem;cursor:default;
+}
+.dash-nav-item.active{background:var(--teal);color:#fff}
+.dash-nav-item .ico{font-size:.75rem;width:14px;text-align:center}
+.dash-nav-group{font-size:.55rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-400);padding:.5rem .5rem .2rem;margin-top:.25rem}
+.dash-main{padding:.875rem}
+.dash-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.dash-title{font-weight:700;font-size:.85rem;color:var(--blue-deep)}
+.dash-date{font-size:.62rem;color:var(--gray-400)}
+.dash-new-btn{background:var(--teal);color:#fff;font-size:.62rem;font-weight:600;padding:.25rem .6rem;border-radius:5px;border:none;cursor:default}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.75rem}
+.kpi{background:#fff;border:1px solid #E4ECF2;border-radius:8px;padding:.6rem .75rem}
+.kpi-label{font-size:.58rem;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.2rem}
+.kpi-val{font-size:1.1rem;font-weight:700;color:var(--blue-deep);line-height:1}
+.kpi-sub{font-size:.58rem;color:var(--gray-400);margin-top:.1rem}
+.kpi-val.teal{color:var(--teal)}
+.kpi-val.gold{color:var(--gold)}
+.kpi-val.red{color:var(--red-soft)}
+.dash-two-col{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem}
+.dash-panel{background:#fff;border:1px solid #E4ECF2;border-radius:8px;padding:.6rem .75rem}
+.dash-panel-title{font-size:.62rem;font-weight:600;color:var(--blue-deep);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em}
+.schedule-item{
+  display:flex;align-items:flex-start;gap:.4rem;
+  padding:.3rem .4rem;border-radius:5px;
+  margin-bottom:.25rem;font-size:.62rem;
+}
+.schedule-item.osde{background:#EBF4FB;border-left:2px solid #1D72B8}
+.schedule-item.pami{background:#FFF8EB;border-left:2px solid var(--gold)}
+.schedule-item.emergency{background:#FDECEA;border-left:2px solid var(--red-soft)}
+.sched-time{font-weight:600;color:var(--gray-600);min-width:30px}
+.sched-name{font-weight:600;color:var(--blue-deep)}
+.sched-detail{color:var(--gray-400)}
+.coverage-row{display:flex;align-items:center;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid #F0F4F7;font-size:.63rem}
+.coverage-row:last-child{border:none}
+.cov-badge{font-size:.55rem;font-weight:700;padding:.1rem .4rem;border-radius:4px}
+.cov-badge.active{background:#E6F7F0;color:#1D8F5E}
+.cov-badge.review{background:#FFF3E0;color:#B07A00}
+.dash-activity{background:#fff;border:1px solid #E4ECF2;border-radius:8px;padding:.6rem .75rem}
+.activity-item{display:flex;align-items:center;gap:.4rem;padding:.25rem 0;border-bottom:1px solid #F5F7FA;font-size:.6rem;color:var(--gray-600)}
+.activity-item:last-child{border:none}
+.activity-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.activity-dot.green{background:var(--green)}
+.activity-dot.blue{background:var(--blue-bright)}
+.activity-dot.gray{background:var(--gray-200)}
+.activity-ago{color:var(--gray-400);margin-left:auto;flex-shrink:0}
+
+/* floating badge */
+.hero-badge-float{
+  position:absolute;
+  bottom:-20px;left:-28px;
+  background:#fff;border-radius:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.15);
+  padding:.65rem .875rem;
+  display:flex;align-items:center;gap:.5rem;
+  animation:float 4s ease-in-out infinite;
+}
+.badge-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.badge-text{font-size:.7rem;font-weight:600;color:var(--blue-deep);line-height:1.3}
+.badge-text span{font-weight:400;color:var(--gray-400);font-size:.63rem;display:block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── LOGOS / TRUST ── */
+.trust{
+  background:#fff;
+  border-bottom:1px solid var(--gray-100);
+  padding:1.5rem 2.5rem;
 }
 .trust-inner{
   max-width:1280px;margin:0 auto;
   display:flex;align-items:center;justify-content:center;
-  gap:3rem;flex-wrap:wrap;
+  gap:2.5rem;flex-wrap:wrap;
 }
-.trust-item{
+.trust-pill{
   display:flex;align-items:center;gap:.5rem;
-  font-size:.8rem;color:var(--gray-400);
-  letter-spacing:.02em;
+  font-size:.78rem;font-weight:500;color:var(--gray-600);
 }
-.trust-icon{
-  width:20px;height:20px;
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.65rem;
-}
-.trust-icon.teal{background:rgba(14,165,160,0.15);color:var(--teal-light)}
-.trust-icon.gold{background:rgba(240,180,41,0.15);color:var(--gold)}
+.trust-pill svg{width:16px;height:16px;flex-shrink:0;color:var(--teal)}
+.trust-sep{width:1px;height:20px;background:var(--gray-200)}
 
-/* ===== PROBLEMS ===== */
-.problems{
-  padding:6rem 2rem;
-  background:var(--off-white);
-  position:relative;
-}
-.problems::before{
-  content:'';position:absolute;top:0;left:0;right:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--gray-200),transparent);
-}
-.section-header{
-  text-align:center;max-width:640px;margin:0 auto 3.5rem;
-}
+/* ── SECTION SHARED ── */
+.section-wrap{max-width:1280px;margin:0 auto;padding:0 2.5rem}
 .section-label{
   display:inline-flex;align-items:center;gap:.5rem;
-  font-size:.75rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:.12em;
-  color:var(--teal);margin-bottom:1rem;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--teal);margin-bottom:.875rem;
 }
+.section-label::before{content:'';width:20px;height:2px;background:var(--teal);border-radius:2px}
 .section-title{
   font-family:var(--font-display);
-  font-size:clamp(2rem,3.5vw,2.75rem);
+  font-size:clamp(1.9rem,3vw,2.75rem);
   line-height:1.15;
-  color:var(--navy);
-  letter-spacing:-0.02em;
+  color:var(--blue-deep);
+  letter-spacing:-.02em;
   margin-bottom:1rem;
 }
 .section-desc{
-  font-size:1.05rem;line-height:1.7;
+  font-size:1rem;line-height:1.75;
   color:var(--gray-600);
+  max-width:560px;
 }
-.problems-grid{
+.center{text-align:center}
+.center .section-desc{margin:0 auto}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ── PROBLEM ── */
+.problem{padding:6rem 2.5rem;background:var(--off-white)}
+.problem-grid{
+  max-width:1280px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.problem-text{padding-right:2rem}
+.problem-text p{font-size:1rem;line-height:1.8;color:var(--gray-600);margin-top:1.25rem}
+.stat-pills{display:flex;flex-wrap:wrap;gap:.625rem;margin-top:2rem}
+.stat-pill{
+  background:#fff;
+  border:1px solid var(--gray-200);
+  border-radius:100px;
+  padding:.4rem 1rem;
+  font-size:.82rem;font-weight:600;color:var(--blue-deep);
+  box-shadow:var(--shadow-sm);
+}
+.stat-pill span{color:var(--teal)}
+.problem-cards{display:grid;gap:1rem}
+.prob-card{
+  background:#fff;border:1px solid var(--gray-100);
+  border-radius:14px;padding:1.5rem;
+  display:flex;gap:1rem;align-items:flex-start;
+  box-shadow:var(--shadow-sm);
+  transition:all .3s var(--ease);
+}
+.prob-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--gray-200)}
+.prob-icon{
+  width:44px;height:44px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.15rem;flex-shrink:0;
+}
+.prob-icon.red{background:#FEF0EE;color:var(--red-soft)}
+.prob-icon.gold{background:#FEF8EC;color:var(--gold)}
+.prob-icon.blue{background:#EBF4FB;color:var(--blue-bright)}
+.prob-card h3{font-size:.95rem;font-weight:600;color:var(--blue-deep);margin-bottom:.35rem}
+.prob-card p{font-size:.85rem;line-height:1.6;color:var(--gray-600)}
+
+/* ── SOLUTION ── */
+.solution{padding:6rem 2.5rem;background:#fff}
+.solution-intro{
+  max-width:1280px;margin:0 auto 4rem;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:3rem;
+  flex-wrap:wrap;
+}
+.modules{
   max-width:1280px;margin:0 auto;
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:1.5rem;
 }
-.problem-card{
-  background:var(--white);
+.module-card{
+  background:var(--off-white);
+  border:1px solid var(--gray-100);
   border-radius:16px;
   padding:2rem;
-  border:1px solid var(--gray-100);
-  transition:all .4s var(--ease-out-expo);
-  position:relative;
-  overflow:hidden;
+  transition:all .4s var(--ease);
+  position:relative;overflow:hidden;
 }
-.problem-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;
-  height:3px;
-  background:linear-gradient(90deg,var(--teal),var(--teal-light));
+.module-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
   transform:scaleX(0);transform-origin:left;
-  transition:transform .4s var(--ease-out-expo);
+  transition:transform .4s var(--ease);
 }
-.problem-card:hover{
-  border-color:rgba(14,165,160,0.2);
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.06);
-}
-.problem-card:hover::before{transform:scaleX(1)}
-.problem-icon{
-  width:48px;height:48px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.25rem;margin-bottom:1.25rem;
-}
-.problem-icon.red{background:rgba(255,107,107,0.1);color:var(--red-soft)}
-.problem-icon.gold{background:rgba(240,180,41,0.1);color:var(--gold)}
-.problem-icon.blue{background:rgba(116,192,252,0.1);color:var(--blue-soft)}
-.problem-card h3{
-  font-size:1.125rem;font-weight:600;
-  color:var(--navy);margin-bottom:.75rem;
-}
-.problem-card p{
-  font-size:.925rem;line-height:1.65;
-  color:var(--gray-600);
-}
+.module-card.m-teal::before{background:var(--teal)}
+.module-card.m-blue::before{background:var(--blue-bright)}
+.module-card.m-gold::before{background:var(--gold)}
+.module-card:hover{background:#fff;transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:var(--gray-200)}
+.module-card:hover::before{transform:scaleX(1)}
+.module-emoji{font-size:2rem;margin-bottom:1.25rem;display:block}
+.module-card h3{font-size:1.1rem;font-weight:700;color:var(--blue-deep);margin-bottom:.625rem}
+.module-card > p{font-size:.875rem;line-height:1.65;color:var(--gray-600);margin-bottom:1.25rem}
+.module-list{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+.module-list li{font-size:.8rem;color:var(--gray-600);display:flex;align-items:flex-start;gap:.5rem}
+.module-list li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;font-size:.75rem;margin-top:.05rem}
 
-/* ===== FEATURES ===== */
-.features{
-  padding:6rem 2rem;
-  background:var(--navy);
-  position:relative;
-  overflow:hidden;
+/* ── WHY NOW ── */
+.why-now{
+  padding:6rem 2.5rem;
+  background:var(--blue-deep);
+  position:relative;overflow:hidden;
 }
-.features::before{
-  content:'';position:absolute;
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  width:1000px;height:1000px;
-  background:radial-gradient(circle,rgba(14,165,160,0.06) 0%,transparent 60%);
+.why-now::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(0,169,157,0.1) 0%,transparent 65%);
   pointer-events:none;
 }
-.features .section-label{color:var(--teal-light)}
-.features .section-title{color:var(--white)}
-.features .section-desc{color:var(--gray-400)}
-.features-grid{
-  max-width:1280px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1.5rem;
-  position:relative;z-index:1;
-}
-.feature-card{
-  background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.07);
-  border-radius:16px;
-  padding:2rem;
-  transition:all .4s var(--ease-out-expo);
-  position:relative;
-  overflow:hidden;
-}
-.feature-card::after{
-  content:'';position:absolute;top:0;left:0;right:0;
-  height:3px;border-radius:3px 3px 0 0;
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .4s var(--ease-out-expo);
-}
-.feature-card.teal-accent::after{background:var(--teal)}
-.feature-card.gold-accent::after{background:var(--gold)}
-.feature-card.blue-accent::after{background:var(--blue-soft)}
-.feature-card:hover{
-  background:rgba(255,255,255,0.06);
-  border-color:rgba(255,255,255,0.12);
-  transform:translateY(-4px);
-}
-.feature-card:hover::after{transform:scaleX(1)}
-.feature-emoji{font-size:2rem;margin-bottom:1.25rem;display:block}
-.feature-card h3{
-  font-size:1.2rem;font-weight:600;
-  color:var(--white);margin-bottom:.75rem;
-}
-.feature-card p{
-  font-size:.9rem;line-height:1.65;
-  color:var(--gray-400);margin-bottom:1.25rem;
-}
-.feature-list{list-style:none}
-.feature-list li{
-  font-size:.825rem;color:var(--gray-200);
-  padding:.375rem 0;
-  display:flex;align-items:flex-start;gap:.5rem;
-  border-top:1px solid rgba(255,255,255,0.04);
-}
-.feature-list li::before{
-  content:'✓';color:var(--teal);font-weight:700;
-  flex-shrink:0;margin-top:1px;
-}
-
-/* ===== HOW IT WORKS ===== */
-.how{
-  padding:6rem 2rem;
-  background:var(--off-white);
-  position:relative;
-}
-.steps{
-  max-width:960px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:2rem;
-  position:relative;
-}
-.steps::before{
-  content:'';position:absolute;
-  top:36px;left:calc(16.66% + 24px);
-  right:calc(16.66% + 24px);
-  height:2px;
-  background:linear-gradient(90deg,var(--teal),var(--gold));
-  z-index:0;
-}
-.step{
-  text-align:center;position:relative;z-index:1;
-}
-.step-num{
-  width:72px;height:72px;border-radius:50%;
-  background:var(--white);
-  border:2px solid var(--teal);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-display);
-  font-size:1.75rem;color:var(--teal);
-  margin:0 auto 1.25rem;
-  box-shadow:0 8px 30px rgba(14,165,160,0.12);
-  transition:all .3s var(--ease-out-expo);
-}
-.step:hover .step-num{
-  background:var(--teal);color:var(--white);
-  transform:scale(1.08);
-  box-shadow:0 12px 40px rgba(14,165,160,0.25);
-}
-.step h3{
-  font-size:1.05rem;font-weight:600;
-  color:var(--navy);margin-bottom:.5rem;
-}
-.step p{
-  font-size:.875rem;line-height:1.6;
-  color:var(--gray-600);
-}
-
-/* ===== STATS SECTION ===== */
-.stats{
-  padding:4rem 2rem;
-  background:var(--navy);
-}
-.stats-grid{
-  max-width:1280px;margin:0 auto;
+.why-now .section-label{color:var(--teal-light)}
+.why-now .section-title{color:var(--white)}
+.why-now .section-desc{color:var(--gray-400)}
+.factors{
+  max-width:1280px;margin:3rem auto 0;
   display:grid;grid-template-columns:repeat(4,1fr);
-  gap:1.5rem;
+  gap:1.25rem;
 }
-.stat-block{text-align:center;padding:1.5rem}
-.stat-block .num{
-  font-family:var(--font-display);
-  font-size:clamp(2rem,4vw,3rem);
-  color:var(--teal-light);
-  line-height:1;
-  margin-bottom:.5rem;
+.factor-card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:14px;padding:1.5rem;
+  transition:all .3s var(--ease);
 }
-.stat-block .label{
-  font-size:.85rem;color:var(--gray-400);
-  line-height:1.4;
+.factor-card:hover{background:rgba(255,255,255,0.07);border-color:rgba(0,169,157,0.25);transform:translateY(-3px)}
+.factor-num{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--teal-light);margin-bottom:.875rem;
 }
+.factor-card h3{font-size:1rem;font-weight:600;color:#fff;margin-bottom:.5rem}
+.factor-card p{font-size:.825rem;line-height:1.65;color:var(--gray-400)}
 
-/* ===== PRICING ===== */
-.pricing{
-  padding:6rem 2rem;
-  background:var(--off-white);
-}
+/* ── MARKET ── */
+.market{padding:6rem 2.5rem;background:var(--off-white)}
+.market-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:5rem;align-items:center}
+.market-numbers{display:flex;flex-direction:column;gap:1.5rem;margin-top:2.5rem}
+.market-row{display:flex;align-items:center;gap:1rem}
+.market-bar-wrap{flex:1;height:8px;background:var(--gray-100);border-radius:100px;overflow:hidden}
+.market-bar{height:100%;border-radius:100px;background:var(--teal)}
+.market-row-info{min-width:220px}
+.market-row-info .market-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gray-400);margin-bottom:.2rem}
+.market-row-info .market-val{font-size:1.5rem;font-weight:700;color:var(--blue-deep);font-family:var(--font-display);letter-spacing:-.02em}
+.market-row-info .market-desc{font-size:.75rem;color:var(--gray-600)}
+.market-facts{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem}
+.fact-item{display:flex;align-items:flex-start;gap:.75rem;background:#fff;border:1px solid var(--gray-100);border-radius:12px;padding:1rem 1.25rem}
+.fact-icon{width:36px;height:36px;border-radius:9px;background:var(--teal-pale);color:var(--teal);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.fact-item h4{font-size:.875rem;font-weight:600;color:var(--blue-deep);margin-bottom:.15rem}
+.fact-item p{font-size:.78rem;line-height:1.5;color:var(--gray-600)}
+
+/* ── PRICING ── */
+.pricing{padding:6rem 2.5rem;background:#fff}
 .pricing-cards{
-  max-width:960px;margin:0 auto;
+  max-width:980px;margin:3rem auto 0;
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:1.5rem;
 }
 .price-card{
-  background:var(--white);
-  border:1px solid var(--gray-100);
-  border-radius:16px;
-  padding:2rem;
-  text-align:center;
-  transition:all .4s var(--ease-out-expo);
+  background:var(--off-white);border:1px solid var(--gray-100);
+  border-radius:16px;padding:2rem;
+  transition:all .4s var(--ease);
   position:relative;
 }
 .price-card.featured{
+  background:#fff;
   border-color:var(--teal);
-  box-shadow:0 20px 60px rgba(14,165,160,0.12);
-  transform:scale(1.04);
+  box-shadow:0 0 0 4px rgba(0,169,157,0.08),var(--shadow-lg);
 }
-.price-card.featured::before{
-  content:'Most popular';
-  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:var(--teal);color:var(--white);
-  font-size:.7rem;font-weight:700;
-  padding:.25rem 1rem;border-radius:100px;
-  text-transform:uppercase;letter-spacing:.06em;
+.price-badge{
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--teal);color:#fff;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:.25rem .875rem;border-radius:100px;white-space:nowrap;
 }
-.price-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px rgba(0,0,0,0.08);
-}
-.price-card.featured:hover{transform:scale(1.04) translateY(-4px)}
-.price-tier{
-  font-size:.8rem;font-weight:600;
-  text-transform:uppercase;letter-spacing:.1em;
-  color:var(--teal);margin-bottom:.5rem;
-}
-.price-beds{
-  font-size:.85rem;color:var(--gray-600);
-  margin-bottom:1.25rem;
-}
+.price-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.price-card.featured:hover{transform:translateY(-4px);box-shadow:0 0 0 4px rgba(0,169,157,0.1),var(--shadow-lg)}
+.price-tier{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:.25rem}
+.price-target{font-size:.8rem;color:var(--gray-400);margin-bottom:1.5rem}
 .price-amount{
   font-family:var(--font-display);
-  font-size:2.5rem;color:var(--navy);
-  line-height:1;margin-bottom:.25rem;
+  font-size:2.75rem;font-weight:600;color:var(--blue-deep);line-height:1;
 }
-.price-period{font-size:.8rem;color:var(--gray-400);margin-bottom:1.5rem}
-.price-features{
-  list-style:none;text-align:left;
-  margin-bottom:1.5rem;
-}
-.price-features li{
-  font-size:.825rem;color:var(--gray-600);
-  padding:.4rem 0;
-  display:flex;align-items:center;gap:.5rem;
-}
-.price-features li::before{content:'✓';color:var(--teal);font-weight:700;font-size:.75rem}
+.price-period{font-size:.78rem;color:var(--gray-400);margin:.25rem 0 1.5rem}
+.price-ul{list-style:none;margin-bottom:1.75rem;display:flex;flex-direction:column;gap:.4rem}
+.price-ul li{font-size:.8rem;color:var(--gray-600);display:flex;align-items:flex-start;gap:.4rem}
+.price-ul li::before{content:'✓';color:var(--teal);font-weight:700;flex-shrink:0;font-size:.75rem;margin-top:.05rem}
 .price-btn{
   width:100%;padding:.75rem;border-radius:10px;
   font-size:.875rem;font-weight:600;
-  transition:all .3s var(--ease-out-expo);
+  transition:all .25s var(--ease);
 }
-.price-btn.primary{
-  background:var(--teal);color:var(--white);
-  box-shadow:0 4px 16px rgba(14,165,160,0.2);
-}
-.price-btn.primary:hover{background:var(--teal-light);transform:translateY(-1px)}
-.price-btn.outline{
-  background:transparent;color:var(--teal);
-  border:1.5px solid var(--teal);
-}
-.price-btn.outline:hover{background:rgba(14,165,160,0.05)}
+.price-btn.solid{background:var(--teal);color:#fff;box-shadow:0 3px 14px rgba(0,169,157,0.25)}
+.price-btn.solid:hover{background:var(--teal-light);transform:translateY(-1px)}
+.price-btn.outline{background:#fff;color:var(--teal);border:1.5px solid var(--teal)}
+.price-btn.outline:hover{background:var(--teal-pale)}
+.price-note{text-align:center;font-size:.78rem;color:var(--gray-400);margin-top:1.5rem}
+.price-note strong{color:var(--blue-deep)}
 
-/* ===== CTA SECTION ===== */
+/* ── ROADMAP ── */
+.roadmap{padding:6rem 2.5rem;background:var(--off-white)}
+.roadmap-inner{max-width:1100px;margin:3rem auto 0;position:relative}
+.roadmap-line{
+  position:absolute;top:24px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue-bright));
+  z-index:0;
+}
+.roadmap-steps{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1.5rem;position:relative;z-index:1;
+}
+.roadmap-step{text-align:center}
+.road-node{
+  width:48px;height:48px;border-radius:50%;
+  background:#fff;border:2px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.85rem;color:var(--teal);
+  margin:0 auto 1rem;
+  box-shadow:0 0 0 6px var(--off-white);
+  transition:all .3s var(--ease);
+}
+.roadmap-step:hover .road-node{background:var(--teal);color:#fff;transform:scale(1.1)}
+.road-year{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal);margin-bottom:.35rem}
+.road-desc{font-size:.825rem;line-height:1.6;color:var(--gray-600)}
+
+/* ── CTA ── */
 .cta-section{
-  padding:6rem 2rem;
-  background:var(--navy);
+  padding:6rem 2.5rem;
+  background:var(--blue-deep);
+  position:relative;overflow:hidden;
   text-align:center;
-  position:relative;
-  overflow:hidden;
 }
 .cta-section::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at center,rgba(14,165,160,0.1) 0%,transparent 60%);
+  content:'';position:absolute;
+  bottom:-100px;left:50%;transform:translateX(-50%);
+  width:700px;height:700px;
+  background:radial-gradient(circle,rgba(0,169,157,0.12) 0%,transparent 60%);
   pointer-events:none;
 }
-.cta-inner{
-  max-width:640px;margin:0 auto;
-  position:relative;z-index:1;
-}
+.cta-inner{max-width:600px;margin:0 auto;position:relative;z-index:1}
 .cta-section h2{
   font-family:var(--font-display);
-  font-size:clamp(2rem,4vw,2.75rem);
-  color:var(--white);
-  margin-bottom:1rem;
-  letter-spacing:-0.02em;
+  font-size:clamp(2rem,3.5vw,2.75rem);
+  color:#fff;letter-spacing:-.02em;margin-bottom:1rem;
 }
-.cta-section p{
-  font-size:1.05rem;line-height:1.7;
-  color:var(--gray-400);
-  margin-bottom:2rem;
-}
-.cta-form{
-  display:flex;gap:.75rem;
-  max-width:480px;margin:0 auto 1rem;
-}
+.cta-section p{font-size:1rem;line-height:1.75;color:var(--gray-400);margin-bottom:2.25rem}
+.cta-form{display:flex;gap:.75rem;max-width:460px;margin:0 auto 1rem}
 .cta-input{
-  flex:1;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:10px;
-  padding:.875rem 1.25rem;
-  color:var(--white);
-  font-family:var(--font-body);
-  font-size:.95rem;
-  outline:none;
-  transition:border-color .25s;
+  flex:1;background:rgba(255,255,255,0.06);
+  border:1.5px solid rgba(255,255,255,0.12);
+  border-radius:10px;padding:.85rem 1.25rem;
+  color:#fff;font-family:var(--font-body);font-size:.9rem;
+  outline:none;transition:border-color .2s;
 }
-.cta-input::placeholder{color:var(--gray-400)}
+.cta-input::placeholder{color:rgba(255,255,255,0.35)}
 .cta-input:focus{border-color:var(--teal)}
-.cta-submit{
-  background:var(--teal);color:var(--white);
-  padding:.875rem 1.75rem;border-radius:10px;
-  font-size:.95rem;font-weight:600;
-  transition:all .3s var(--ease-out-expo);
-  white-space:nowrap;
+.cta-btn{
+  background:var(--teal);color:#fff;
+  padding:.85rem 1.5rem;border-radius:10px;
+  font-size:.9rem;font-weight:600;white-space:nowrap;
+  box-shadow:0 3px 16px rgba(0,169,157,0.3);
+  transition:all .25s var(--ease);
 }
-.cta-submit:hover{
-  background:var(--teal-light);
-  transform:translateY(-1px);
-}
-.cta-note{
-  font-size:.8rem;color:var(--gray-400);
-}
-.whatsapp-btn{
+.cta-btn:hover{background:var(--teal-light);transform:translateY(-1px)}
+.cta-note{font-size:.75rem;color:rgba(255,255,255,0.35)}
+.whatsapp{
   display:inline-flex;align-items:center;gap:.5rem;
   margin-top:1.5rem;
-  background:rgba(37,211,102,0.12);
-  border:1px solid rgba(37,211,102,0.25);
-  color:#25D366;
-  padding:.625rem 1.25rem;border-radius:10px;
-  font-size:.875rem;font-weight:500;
-  transition:all .3s var(--ease-out-expo);
+  background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.2);
+  color:#25D366;padding:.6rem 1.25rem;border-radius:10px;
+  font-size:.85rem;font-weight:500;
+  transition:all .25s var(--ease);
 }
-.whatsapp-btn:hover{
-  background:rgba(37,211,102,0.2);
-  transform:translateY(-1px);
-}
+.whatsapp:hover{background:rgba(37,211,102,0.18)}
 
-/* ===== FOOTER ===== */
+/* ── FOOTER ── */
 .footer{
-  background:var(--navy);
+  background:var(--blue-deep);
   border-top:1px solid rgba(255,255,255,0.06);
-  padding:3rem 2rem 2rem;
+  padding:2.5rem 2.5rem 1.5rem;
 }
-.footer-inner{
+.footer-top{
   max-width:1280px;margin:0 auto;
+  display:flex;align-items:flex-start;justify-content:space-between;
+  flex-wrap:wrap;gap:2rem;
+  padding-bottom:2rem;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.footer-brand .f-logo{font-weight:700;font-size:1.2rem;color:#fff;margin-bottom:.5rem}
+.footer-brand p{font-size:.78rem;color:var(--gray-400);line-height:1.6;max-width:220px}
+.footer-links{display:flex;gap:3rem;flex-wrap:wrap}
+.footer-col h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--teal-light);margin-bottom:.875rem}
+.footer-col a{display:block;font-size:.8rem;color:var(--gray-400);margin-bottom:.5rem;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{
+  max-width:1280px;margin:.75rem auto 0;
   display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:1.5rem;
-}
-.footer-logo{
-  font-family:var(--font-display);
-  font-size:1.25rem;color:var(--teal-light);
-}
-.footer-links{display:flex;gap:2rem}
-.footer-links a{
-  font-size:.8rem;color:var(--gray-400);
-  transition:color .25s;
-}
-.footer-links a:hover{color:var(--teal-light)}
-.footer-copy{
-  width:100%;text-align:center;
-  padding-top:1.5rem;
-  border-top:1px solid rgba(255,255,255,0.04);
-  margin-top:1rem;
-  font-size:.75rem;color:var(--gray-400);
+  flex-wrap:wrap;gap:.75rem;
+  font-size:.72rem;color:var(--gray-600);
 }
 
-/* ===== SCROLL ANIMATIONS ===== */
-.reveal{
-  opacity:0;transform:translateY(30px);
-  transition:all .8s var(--ease-out-expo);
-}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-
-/* ===== RESPONSIVE ===== */
+/* ── RESPONSIVE ── */
 @media(max-width:1024px){
-  .hero-grid{grid-template-columns:1fr;gap:3rem;text-align:center}
+  .hero-inner{grid-template-columns:1fr;gap:3rem;text-align:center}
   .hero-sub{margin:0 auto 2.5rem}
   .hero-actions{justify-content:center}
-  .hero-visual{max-width:560px;margin:0 auto}
-  .hero-float{display:none}
-  .features-grid,.problems-grid{grid-template-columns:1fr 1fr}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .pricing-cards{grid-template-columns:1fr;max-width:400px}
+  .hero-visual{max-width:600px;margin:0 auto}
+  .hero-badge-float{display:none}
+  .problem-grid,.market-inner{grid-template-columns:1fr}
+  .problem-text{padding-right:0}
+  .modules{grid-template-columns:1fr 1fr}
+  .factors{grid-template-columns:1fr 1fr}
+  .roadmap-steps{grid-template-columns:1fr 1fr}
+  .roadmap-line{display:none}
+  .pricing-cards{max-width:360px;grid-template-columns:1fr}
   .price-card.featured{transform:none}
-  .price-card.featured:hover{transform:translateY(-4px)}
 }
 @media(max-width:768px){
-  .nav-links{display:none}
+  .nav-links,.nav-right .btn-ghost{display:none}
   .mobile-toggle{display:block}
-  .features-grid,.problems-grid{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr;gap:2.5rem}
-  .steps::before{display:none}
+  .modules{grid-template-columns:1fr}
+  .factors{grid-template-columns:1fr}
+  .kpi-row{grid-template-columns:1fr 1fr}
   .cta-form{flex-direction:column}
-  .hero{padding:7rem 1.5rem 3rem}
+  .footer-links{gap:2rem}
+  .hero::after{display:none}
 }
 </style>
 </head>
@@ -741,63 +623,103 @@ button{cursor:pointer;border:none;font-family:inherit}
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="#" class="nav-logo"><span class="dot"></span> MUBA</a>
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="32" height="32" rx="8" fill="#00A99D"/>
+      <path d="M9 22V11l7 6 7-6v11" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="16" cy="9" r="2" fill="#fff"/>
+    </svg>
+    MUBA
+  </a>
   <div class="nav-links">
     <a href="#problem">Problem</a>
-    <a href="#modules">Modules</a>
-    <a href="#how-it-works">How it works</a>
+    <a href="#solution">Platform</a>
+    <a href="#market">Market</a>
     <a href="#pricing">Pricing</a>
-    <a href="#demo" class="nav-cta">Request demo</a>
   </div>
-  <button class="mobile-toggle" aria-label="Menu">☰</button>
+  <div class="nav-right">
+    <a href="#cta" class="btn-ghost">Sign in</a>
+    <a href="#cta" class="btn-filled">Request demo</a>
+  </div>
+  <button class="mobile-toggle">☰</button>
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="inicio">
-  <div class="hero-grid">
+<section class="hero">
+  <div class="hero-inner">
     <div class="hero-content">
-      <div class="hero-badge"><span class="pulse"></span> Cloud platform for healthcare institutions</div>
-      <h1>Run your nursing home <em>without spreadsheets</em></h1>
-      <p class="hero-sub">MUBA connects patients, beds, and insurance providers in one platform. Onboard residents in 5 minutes. Real-time occupancy dashboard. No installation required.</p>
+      <div class="hero-tag"><span class="dot"></span> Healthcare SaaS · Argentina</div>
+      <h1>The <em>operating layer</em> for healthcare in Latin America</h1>
+      <p class="hero-sub">MUBA centralizes scheduling, records, billing, and insurer coordination in one lightweight platform — built for how clinics actually work, not for 500-bed hospitals.</p>
       <div class="hero-actions">
-        <a href="#demo" class="btn-primary">
+        <a href="#cta" class="hero-btn-primary">
           Request a free demo
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="#modules" class="btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5l4 2.5-4 2.5V5.5z" fill="currentColor"/></svg>
-          See the product
+        <a href="#solution" class="hero-btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 5.5l4 2.5-4 2.5V5.5z" fill="currentColor"/></svg>
+          See the platform
         </a>
       </div>
     </div>
+
+    <!-- DASHBOARD MOCKUP -->
     <div class="hero-visual">
-      <div class="hero-float f1">
-        <div class="float-icon green">✓</div>
-        <div class="float-text"><strong>New resident</strong>Onboarded in 4:32</div>
+      <div class="hero-badge-float">
+        <div class="badge-icon" style="background:#E6F7F0">✓</div>
+        <div class="badge-text">Invoice sent to PAMI<span>22 min ago · ARS $84,000</span></div>
       </div>
-      <div class="hero-float f2">
-        <div class="float-icon gold">⚡</div>
-        <div class="float-text"><strong>Coverage verified</strong>OSDE Plan 310</div>
-      </div>
-      <div class="hero-mockup">
-        <div class="mockup-topbar">
-          <div class="mockup-dots"><span></span><span></span><span></span></div>
-          <div class="mockup-url">muba.app/dashboard</div>
+      <div class="dashboard">
+        <div class="dash-topbar">
+          <div class="dash-dots"><span></span><span></span><span></span></div>
+          <div class="dash-url">muba.app/dashboard</div>
         </div>
-        <div class="mockup-content">
-          <div class="stat-card">
-            <div class="stat-label">Active residents</div>
-            <div class="stat-value">47</div>
-            <div class="stat-sub">+3 this month</div>
+        <div class="dash-body">
+          <div class="dash-sidebar">
+            <div class="dash-logo"><div class="dash-logo-hex"></div>MUBA</div>
+            <div class="dash-clinic"><strong>San Martín Clinic</strong>CABA · Small clinic</div>
+            <div class="dash-nav-group">Operations</div>
+            <div class="dash-nav-item active"><span class="ico">⊞</span> Dashboard</div>
+            <div class="dash-nav-item"><span class="ico">👤</span> Patients</div>
+            <div class="dash-nav-item"><span class="ico">📅</span> Appointments</div>
+            <div class="dash-nav-item"><span class="ico">🛏️</span> Beds</div>
+            <div class="dash-nav-item"><span class="ico">📋</span> EMR</div>
+            <div class="dash-nav-group">Finance</div>
+            <div class="dash-nav-item"><span class="ico">💰</span> Billing</div>
+            <div class="dash-nav-item"><span class="ico">🏛️</span> ARCA / Tax</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">Occupancy</div>
-            <div class="stat-value">78%</div>
-            <div class="stat-sub">47 of 60 beds</div>
-          </div>
-          <div class="bed-grid">
-            <div class="bed-grid-label">Bed map — Floor 1</div>
-            <div class="beds" id="beds"></div>
+          <div class="dash-main">
+            <div class="dash-header-row">
+              <div><div class="dash-title">Dashboard</div><div class="dash-date">Thursday, April 10, 2026 · 10:25 AM</div></div>
+              <button class="dash-new-btn">+ New patient</button>
+            </div>
+            <div class="kpi-row">
+              <div class="kpi"><div class="kpi-label">Patients today</div><div class="kpi-val teal">12</div><div class="kpi-sub">↑3 vs yesterday</div></div>
+              <div class="kpi"><div class="kpi-label">Occupied beds</div><div class="kpi-val">18<span style="font-size:.7rem;color:var(--gray-400)">/24</span></div><div class="kpi-sub">75% occupancy</div></div>
+              <div class="kpi"><div class="kpi-label">Pending invoices</div><div class="kpi-val gold">7</div><div class="kpi-sub">ARS $1.2M</div></div>
+              <div class="kpi"><div class="kpi-label">ARCA Alerts</div><div class="kpi-val red">2</div><div class="kpi-sub">Action required</div></div>
+            </div>
+            <div class="dash-two-col">
+              <div class="dash-panel">
+                <div class="dash-panel-title">Today's schedule — Dr. Ramírez</div>
+                <div class="schedule-item osde"><span class="sched-time">9:00</span><div><div class="sched-name">Gómez, Ana</div><div class="sched-detail">OSDE · Consultation</div></div></div>
+                <div class="schedule-item pami"><span class="sched-time">8:30</span><div><div class="sched-name">Herrera, Lucas</div><div class="sched-detail">PAMI · Check-up</div></div></div>
+                <div class="schedule-item emergency"><span class="sched-time">10:00</span><div><div class="sched-name">Fernández, C.</div><div class="sched-detail">Emergency</div></div></div>
+              </div>
+              <div class="dash-panel">
+                <div class="dash-panel-title">Active coverages</div>
+                <div class="coverage-row"><span style="font-size:.65rem;font-weight:600;color:var(--blue-deep)">OSDE</span><span style="font-size:.6rem;color:var(--gray-400)">Prepaid · 4 patients</span><span class="cov-badge active">Active</span></div>
+                <div class="coverage-row"><span style="font-size:.65rem;font-weight:600;color:var(--blue-deep)">PAMI</span><span style="font-size:.6rem;color:var(--gray-400)">Social ins. · 3 patients</span><span class="cov-badge active">Active</span></div>
+                <div class="coverage-row"><span style="font-size:.65rem;font-weight:600;color:var(--blue-deep)">IOMA</span><span style="font-size:.6rem;color:var(--gray-400)">Social ins. · 2 patients</span><span class="cov-badge active">Active</span></div>
+                <div class="coverage-row"><span style="font-size:.65rem;font-weight:600;color:var(--blue-deep)">Swiss Medical</span><span style="font-size:.6rem;color:var(--gray-400)">Prepaid · 1 patient</span><span class="cov-badge review">Review</span></div>
+              </div>
+            </div>
+            <div class="dash-activity" style="margin-top:.5rem">
+              <div class="dash-panel-title">Recent activity</div>
+              <div class="activity-item"><span class="activity-dot green"></span>Carlos Fernández admitted — Dr. Ramírez · OSDE<span class="activity-ago">8 min</span></div>
+              <div class="activity-item"><span class="activity-dot blue"></span>Invoice #2847 sent to PAMI · ARS $84,000<span class="activity-ago">22 min</span></div>
+              <div class="activity-item"><span class="activity-dot gray"></span>ARCA CAE issued #A0012847 — automatic<span class="activity-ago">2h ago</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -806,280 +728,409 @@ button{cursor:pointer;border:none;font-family:inherit}
 </section>
 
 <!-- TRUST BAR -->
-<div class="trust-bar">
+<div class="trust">
   <div class="trust-inner">
-    <div class="trust-item"><span class="trust-icon teal">🔒</span> Ley 25.326 compliant</div>
-    <div class="trust-item"><span class="trust-icon teal">☁️</span> SaaS multi-tenant</div>
-    <div class="trust-item"><span class="trust-icon gold">⚡</span> Go-live in weeks</div>
-    <div class="trust-item"><span class="trust-icon teal">🏥</span> 20–200 beds</div>
-    <div class="trust-item"><span class="trust-icon gold">🎓</span> Built at ETH Zürich</div>
+    <div class="trust-pill">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 1.5l1.5 3 3.5.5-2.5 2.5.5 3.5L8 9.5 5 11l.5-3.5L3 5l3.5-.5L8 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+      Built at ETH Zürich
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-pill">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h6M5 10h4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Ley 25.326 compliant
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-pill">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 2a6 6 0 100 12A6 6 0 008 2z" stroke="currentColor" stroke-width="1.2"/><path d="M8 5v3l2 1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Go-live in weeks, not months
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-pill">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M8 3v10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      300+ obra sociales supported
+    </div>
+    <div class="trust-sep"></div>
+    <div class="trust-pill">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M8 2l1.8 3.6L14 6.3l-3 2.9.7 4.1L8 11.3l-3.7 1.9.7-4.1-3-2.9 4.2-.6z" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/></svg>
+      ~65% gross margin SaaS
+    </div>
   </div>
 </div>
 
-<!-- PROBLEMS -->
-<section class="problems" id="problem">
-  <div class="section-header">
-    <div class="section-label">⎯ The problem</div>
-    <h2 class="section-title">Nursing homes deserve better technology</h2>
-    <p class="section-desc">Today you manage patients in Excel, track coverage in a notebook, and remember bed assignments from memory. Existing systems are built for large hospitals.</p>
-  </div>
-  <div class="problems-grid">
-    <div class="problem-card reveal">
-      <div class="problem-icon red">📋</div>
-      <h3>Manual processes</h3>
-      <p>Admissions, beds, and insurance coverage tracked on Excel or paper. High error rates, no audit trail, no traceability. Hours wasted on tasks that should take minutes.</p>
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="problem-grid">
+    <div class="problem-text reveal">
+      <div class="section-label">The problem</div>
+      <h2 class="section-title">Argentine healthcare runs on Excel and WhatsApp</h2>
+      <p>80% of Argentine health institutions still rely on paper-based processes and manual coordination with 300+ insurers. Existing software is designed for 500-bed hospitals — expensive, complex, and irrelevant for most clinics.</p>
+      <div class="stat-pills">
+        <div class="stat-pill"><span>80%</span> still paper-based</div>
+        <div class="stat-pill"><span>70%</span> have fewer than 100 beds</div>
+        <div class="stat-pill"><span>300+</span> distinct obra sociales</div>
+        <div class="stat-pill"><span>6,500</span> inpatient establishments</div>
+      </div>
     </div>
-    <div class="problem-card reveal reveal-delay-1">
-      <div class="problem-icon gold">🏗️</div>
-      <h3>Oversized software</h3>
-      <p>Existing systems are designed for 500+ bed hospitals. Expensive (USD 50K–200K), complex to deploy, and packed with features you'll never use.</p>
-    </div>
-    <div class="problem-card reveal reveal-delay-2">
-      <div class="problem-icon blue">🔗</div>
-      <h3>No payer connectivity</h3>
-      <p>Billing to insurance providers, coverage verification, and collections tracking are disconnected from daily operations. You lose revenue on uncollected claims.</p>
+    <div class="problem-cards">
+      <div class="prob-card reveal d1">
+        <div class="prob-icon red">📋</div>
+        <div>
+          <h3>Manual & fragmented processes</h3>
+          <p>Admissions, beds, and insurance coverage tracked across Excel, notebooks, and WhatsApp. High error rates, no audit trail, lost revenue.</p>
+        </div>
+      </div>
+      <div class="prob-card reveal d2">
+        <div class="prob-icon gold">🏗️</div>
+        <div>
+          <h3>Oversized, expensive software</h3>
+          <p>Enterprise solutions (Oracle Health, Philips, NTT Data) cost USD 50K–200K upfront. Not built for how most providers actually operate.</p>
+        </div>
+      </div>
+      <div class="prob-card reveal d3">
+        <div class="prob-icon blue">🔗</div>
+        <div>
+          <h3>No insurer connectivity</h3>
+          <p>Billing to obra sociales, coverage verification, and ARCA/fiscal integration are entirely disconnected from daily clinical operations.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="features" id="modules">
-  <div class="section-header">
-    <div class="section-label">⎯ MVP Modules</div>
-    <h2 class="section-title">Three modules, one system</h2>
-    <p class="section-desc">Everything you need to operate your nursing home or clinic from Day 1. Fully functional, no complex implementation.</p>
+<!-- SOLUTION -->
+<section class="solution" id="solution">
+  <div class="solution-intro section-wrap">
+    <div class="reveal">
+      <div class="section-label">MUBA CMS</div>
+      <h2 class="section-title">One platform.<br>Low friction adoption.</h2>
+    </div>
+    <p class="section-desc reveal d1" style="max-width:420px">Fit into how clinics already work — rather than asking them to rebuild their operations. Lightweight, cloud-native, and designed for fragmented providers under pressure.</p>
   </div>
-  <div class="features-grid">
-    <div class="feature-card teal-accent reveal">
-      <span class="feature-emoji">👤</span>
-      <h3>Residents / Patients</h3>
-      <p>Manage each resident with a complete profile and an onboarding process that takes less than 5 minutes.</p>
-      <ul class="feature-list">
-        <li>Simplified 3-step admission</li>
-        <li>Full profile with 7 tabs</li>
-        <li>Statuses: Active · Absent · Discharged · Deceased</li>
-        <li>Completeness indicator (0–100%)</li>
-        <li>Full history of movements</li>
+  <div class="modules section-wrap">
+    <div class="module-card m-teal reveal">
+      <span class="module-emoji">👤</span>
+      <h3>Patient Registration & EMR</h3>
+      <p>Complete patient profiles, 3-step admissions, and electronic clinical histories — all accessible from any device in under 5 minutes.</p>
+      <ul class="module-list">
+        <li>Simplified 3-step admission flow</li>
+        <li>Full profile with status tracking (Active / Absent / Discharged)</li>
+        <li>Basic HCE (electronic clinical history)</li>
+        <li>Electronic prescriptions</li>
+        <li>Full movement history and audit trail</li>
       </ul>
     </div>
-    <div class="feature-card gold-accent reveal reveal-delay-1">
-      <span class="feature-emoji">🏛️</span>
-      <h3>Payers / Insurance Providers</h3>
-      <p>Master catalog of insurance providers with plans, coverage, and agreements. All connected to your residents.</p>
-      <ul class="feature-list">
+    <div class="module-card m-blue reveal d1">
+      <span class="module-emoji">📅</span>
+      <h3>Scheduling & Appointments</h3>
+      <p>Real-time appointment management per doctor with insurer context, staff scheduling, and WhatsApp-integrated confirmations.</p>
+      <ul class="module-list">
+        <li>Daily schedule per physician</li>
+        <li>Patient–insurer context at a glance</li>
+        <li>Staff on shift visibility</li>
+        <li>Automated appointment confirmations</li>
+        <li>Multi-doctor team management (Growing+)</li>
+      </ul>
+    </div>
+    <div class="module-card m-gold reveal d2">
+      <span class="module-emoji">💳</span>
+      <h3>Billing, Insurers & ARCA</h3>
+      <p>Master catalog of obra sociales with live coverage, OSDE billing, and full ARCA / fiscal integration — no more disconnected spreadsheets.</p>
+      <ul class="module-list">
         <li>Plan and coverage management</li>
-        <li>Agreements with validity dates and rates</li>
-        <li>Expiration alerts at 30 days</li>
-        <li>Unique tax ID validation</li>
-        <li>Accidental deletion protection</li>
-      </ul>
-    </div>
-    <div class="feature-card blue-accent reveal reveal-delay-2">
-      <span class="feature-emoji">🛏️</span>
-      <h3>Beds &amp; Occupancy</h3>
-      <p>Visual real-time occupancy dashboard. Always know exactly how many beds are available.</p>
-      <ul class="feature-list">
-        <li>Hierarchy: Building → Floor → Room → Bed</li>
-        <li>Real-time occupancy dashboard</li>
-        <li>States: Free · Occupied · Cleaning · Maintenance</li>
-        <li>Assignment with full audit trail</li>
-        <li>30-second refresh rate</li>
+        <li>OSDE billing & facturation</li>
+        <li>ARCA / fiscal integration & CAE issuance</li>
+        <li>Agreement validity alerts (30-day notice)</li>
+        <li>Advanced KPI dashboard & reports (Advanced)</li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="how" id="how-it-works">
-  <div class="section-header">
-    <div class="section-label">⎯ How it works</div>
-    <h2 class="section-title">From Excel to MUBA in days</h2>
-    <p class="section-desc">No installation, no long contracts, no infrastructure investment. Start operating in less than a week.</p>
-  </div>
-  <div class="steps">
-    <div class="step reveal">
-      <div class="step-num">1</div>
-      <h3>Configure your facility</h3>
-      <p>We create your account and set up buildings, floors, rooms, and beds. All in a single assisted setup session.</p>
+<!-- WHY NOW -->
+<section class="why-now" id="why-now">
+  <div class="section-wrap">
+    <div class="center reveal">
+      <div class="section-label">Why now</div>
+      <h2 class="section-title" style="color:var(--white)">The sector can no longer absorb fragmentation</h2>
+      <p class="section-desc" style="color:var(--gray-400);margin:0 auto">Four converging forces make 2026 the inflection point for healthcare digitalization in Argentina.</p>
     </div>
-    <div class="step reveal reveal-delay-1">
-      <div class="step-num">2</div>
-      <h3>Import your data</h3>
-      <p>Upload residents and connect your insurance providers. Assisted migration from Excel or manual entry in minutes.</p>
-    </div>
-    <div class="step reveal reveal-delay-2">
-      <div class="step-num">3</div>
-      <h3>Operate with MUBA</h3>
-      <p>Real-time dashboard, 5-minute admissions, expiration alerts. All from your browser, on any device.</p>
+    <div class="factors">
+      <div class="factor-card reveal d1">
+        <div class="factor-num">01 — Regulation</div>
+        <h3>Ley de Salud Digital</h3>
+        <p>Argentina's digital health law is accelerating the push toward electronic records and digitalized administration across all health institutions.</p>
+      </div>
+      <div class="factor-card reveal d2">
+        <div class="factor-num">02 — Demographics</div>
+        <h3>Aging population</h3>
+        <p>Rising demand from an aging population is increasing healthcare utilization and operational load at exactly the moment when capacity is strained.</p>
+      </div>
+      <div class="factor-card reveal d3">
+        <div class="factor-num">03 — System complexity</div>
+        <h3>Fragmentation costs</h3>
+        <p>Clinics already manage dozens of disconnected tools and insurer integrations. Coordination is becoming unsustainable without a unified layer.</p>
+      </div>
+      <div class="factor-card reveal d4">
+        <div class="factor-num">04 — Market gap</div>
+        <h3>No solution fits</h3>
+        <p>Enterprise tools are too heavy. Paper and Excel are too fragile. The 70% of providers with under 100 beds have no purpose-built option.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-<section class="stats">
-  <div class="stats-grid">
-    <div class="stat-block reveal">
-      <div class="num">&lt;5 min</div>
-      <div class="label">Resident onboarding time</div>
+<!-- MARKET -->
+<section class="market" id="market">
+  <div class="market-inner section-wrap">
+    <div class="reveal">
+      <div class="section-label">Market size</div>
+      <h2 class="section-title">A $16B opportunity starting in Argentina</h2>
+      <p class="section-desc">We're entering through the most underserved segment — small private Argentine clinics — and building toward the operating layer for all of LATAM healthcare.</p>
+      <div class="market-numbers">
+        <div class="market-row">
+          <div class="market-row-info">
+            <div class="market-tag">TAM</div>
+            <div class="market-val">$16B</div>
+            <div class="market-desc">LATAM Healthcare SaaS Market</div>
+          </div>
+          <div class="market-bar-wrap"><div class="market-bar" style="width:100%;background:var(--blue-mid)"></div></div>
+        </div>
+        <div class="market-row">
+          <div class="market-row-info">
+            <div class="market-tag">SAM</div>
+            <div class="market-val">$500M</div>
+            <div class="market-desc">Argentine Healthcare SaaS</div>
+          </div>
+          <div class="market-bar-wrap"><div class="market-bar" style="width:60%;background:var(--blue-bright)"></div></div>
+        </div>
+        <div class="market-row">
+          <div class="market-row-info">
+            <div class="market-tag">SOM (Year 1)</div>
+            <div class="market-val">1%</div>
+            <div class="market-desc">~65 clinics at launch target</div>
+          </div>
+          <div class="market-bar-wrap"><div class="market-bar" style="width:18%;background:var(--teal)"></div></div>
+        </div>
+      </div>
     </div>
-    <div class="stat-block reveal reveal-delay-1">
-      <div class="num">300+</div>
-      <div class="label">Insurance providers in Argentina</div>
-    </div>
-    <div class="stat-block reveal reveal-delay-2">
-      <div class="num">30s</div>
-      <div class="label">Occupancy refresh rate</div>
-    </div>
-    <div class="stat-block reveal reveal-delay-3">
-      <div class="num">0</div>
-      <div class="label">Installation required</div>
+    <div class="market-facts reveal d2">
+      <div class="fact-item">
+        <div class="fact-icon">🏥</div>
+        <div>
+          <h4>6,500 inpatient health establishments</h4>
+          <p>Argentina's fragmented healthcare landscape spans thousands of small and mid-size private clinics, most without any modern software.</p>
+        </div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">👥</div>
+        <div>
+          <h4>75% of Argentines use private healthcare</h4>
+          <p>High private sector engagement means strong willingness-to-pay and significant volume flowing through smaller institutions.</p>
+        </div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">📊</div>
+        <div>
+          <h4>70% of establishments have fewer than 100 beds</h4>
+          <p>The majority of the market is structurally ignored by enterprise vendors — creating an addressable moat for MUBA to own.</p>
+        </div>
+      </div>
+      <div class="fact-item">
+        <div class="fact-icon">🧩</div>
+        <div>
+          <h4>Validated by 5 clinic administrator interviews</h4>
+          <p>Direct problem confirmation from operators who described the fragmentation pain and expressed clear demand for an affordable solution.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
 <section class="pricing" id="pricing">
-  <div class="section-header">
-    <div class="section-label">⎯ Pricing</div>
+  <div class="section-wrap center reveal">
+    <div class="section-label">Pricing</div>
     <h2 class="section-title">Simple, transparent, affordable</h2>
-    <p class="section-desc">No setup cost during launch. Fixed monthly price, no surprises. 15% discount on annual plans.</p>
+    <p class="section-desc">No setup cost at launch. Fixed monthly subscription scaled to practice size. 15% discount on annual plans.</p>
   </div>
   <div class="pricing-cards">
-    <div class="price-card reveal">
-      <div class="price-tier">Starter</div>
-      <div class="price-beds">20–50 beds</div>
-      <div class="price-amount">$150</div>
+    <div class="price-card reveal d1">
+      <div class="price-tier">Essential</div>
+      <div class="price-target">Small practices · up to 5 doctors</div>
+      <div class="price-amount">$500</div>
       <div class="price-period">USD / month</div>
-      <ul class="price-features">
-        <li>All 3 modules included</li>
-        <li>Up to 3 users</li>
-        <li>Email support</li>
-        <li>Cloud-hosted data</li>
+      <ul class="price-ul">
+        <li>Patient registration & EMR</li>
+        <li>Appointment scheduling</li>
+        <li>Basic HCE (electronic clinical history)</li>
+        <li>Cloud dashboard & mobile access</li>
+        <li>Billing & facturation OSDE</li>
+        <li>ARCA / fiscal integration</li>
       </ul>
       <button class="price-btn outline">Start free</button>
     </div>
-    <div class="price-card featured reveal reveal-delay-1">
-      <div class="price-tier">Growth</div>
-      <div class="price-beds">51–100 beds</div>
-      <div class="price-amount">$300</div>
+    <div class="price-card featured reveal d2">
+      <div class="price-badge">Most popular</div>
+      <div class="price-tier">Growing</div>
+      <div class="price-target">Mid-size practices · 6–20 doctors</div>
+      <div class="price-amount">$1,400</div>
       <div class="price-period">USD / month</div>
-      <ul class="price-features">
-        <li>Everything in Starter</li>
-        <li>Up to 10 users</li>
+      <ul class="price-ul">
+        <li>Everything in Essential</li>
+        <li>Multi-doctor team management</li>
+        <li>Electronic prescriptions</li>
+        <li>AI automations</li>
         <li>Priority support</li>
-        <li>Advanced dashboard</li>
-        <li>Exportable reports</li>
       </ul>
-      <button class="price-btn primary">Start free</button>
+      <button class="price-btn solid">Start free</button>
     </div>
-    <div class="price-card reveal reveal-delay-2">
-      <div class="price-tier">Pro</div>
-      <div class="price-beds">101–200 beds</div>
-      <div class="price-amount">$400</div>
+    <div class="price-card reveal d3">
+      <div class="price-tier">Advanced</div>
+      <div class="price-target">Large institutions · 20+ doctors</div>
+      <div class="price-amount">$3,000</div>
       <div class="price-period">USD / month</div>
-      <ul class="price-features">
-        <li>Everything in Growth</li>
-        <li>Unlimited users</li>
-        <li>API access</li>
-        <li>Dedicated onboarding</li>
-        <li>Guaranteed SLA</li>
+      <ul class="price-ul">
+        <li>Everything in Growing</li>
+        <li>Advanced reporting & KPI dashboard</li>
+        <li>Full AI automations</li>
+        <li>API access & custom integrations</li>
+        <li>Dedicated onboarding & SLA</li>
       </ul>
       <button class="price-btn outline">Contact sales</button>
+    </div>
+  </div>
+  <p class="price-note reveal">All plans include a <strong>free trial</strong>. No credit card required. ~65% gross margin SaaS.</p>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap" id="roadmap">
+  <div class="section-wrap center reveal">
+    <div class="section-label">Roadmap</div>
+    <h2 class="section-title">From insight to infrastructure</h2>
+    <p class="section-desc" style="margin:0 auto">We're in 2026 — building the core and signing first clinics. By 2029, MUBA becomes the operating layer for Argentine healthcare.</p>
+  </div>
+  <div class="roadmap-inner">
+    <div class="roadmap-line"></div>
+    <div class="roadmap-steps">
+      <div class="roadmap-step reveal d1">
+        <div class="road-node">1</div>
+        <div class="road-year">2026</div>
+        <p class="road-desc">Build core product. Sign first pilot clinics. Prove the primary scheduling and billing workflow with small private practices.</p>
+      </div>
+      <div class="roadmap-step reveal d2">
+        <div class="road-node">2</div>
+        <div class="road-year">2027</div>
+        <p class="road-desc">Onboard early customers. Validate measurable efficiency gains. Expand EMR and prescription features.</p>
+      </div>
+      <div class="roadmap-step reveal d3">
+        <div class="road-node">3</div>
+        <div class="road-year">2028</div>
+        <p class="road-desc">Expand integrations: payers, labs, imaging, messaging. Reach 200 clinics and complete 20 insurer integrations.</p>
+      </div>
+      <div class="roadmap-step reveal d4">
+        <div class="road-node">4</div>
+        <div class="road-year">2029</div>
+        <p class="road-desc">Move from clinic tool to the operating layer for broader healthcare workflows across Argentina and LATAM.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section" id="demo">
+<section class="cta-section" id="cta">
   <div class="cta-inner">
     <h2>Start free today</h2>
-    <p>No credit card required. Your nursing home running on MUBA in less than a week. Request a personalized demo and we'll show you how.</p>
+    <p>No credit card required. Your clinic running on MUBA in less than a week. Request a personalized demo and we'll show you exactly how.</p>
     <div class="cta-form">
       <input type="email" class="cta-input" placeholder="Your professional email">
-      <button class="cta-submit">Get my demo</button>
+      <button class="cta-btn">Get my demo</button>
     </div>
-    <div class="cta-note">We'll reach out within 24 hours</div>
-    <a href="https://wa.me/5491100000000?text=Hi%2C%20I'd%20like%20to%20learn%20about%20MUBA" class="whatsapp-btn" target="_blank">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Talk to sales on WhatsApp
+    <div class="cta-note">We'll reach out within 24 hours · Raising $1M seed round</div>
+    <a href="https://wa.me/5491162188652?text=Hi%2C%20I%27d%20like%20to%20learn%20about%20MUBA" class="whatsapp" target="_blank">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Talk to us on WhatsApp
     </a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-logo">MUBA</div>
-    <div class="footer-links">
-      <a href="#modules">Product</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#demo">Demo</a>
-      <a href="mailto:hola@muba.app">hola@muba.app</a>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="f-logo">MUBA</div>
+      <p>The lightweight operating layer for healthcare administration in Latin America.</p>
     </div>
-    <div class="footer-copy">© 2026 MUBA. All rights reserved. Made with ❤️ in Buenos Aires & Zürich.</div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="#solution">Platform</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#market">Market</a>
+        <a href="#cta">Request demo</a>
+        <a href="mailto:hi@muba.app">hi@muba.app</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="tel:+541162188652">+54 11 6218 8652</a>
+        <a href="https://muba.app" target="_blank">muba.app</a>
+        <a>Burggraben 24, St. Gallen</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MUBA. All rights reserved.</span>
+    <span>Made with ♥ in Buenos Aires & Zürich</span>
   </div>
 </footer>
 
 <script>
-// Bed grid
-const bedsEl = document.getElementById('beds');
-const bedStates = ['occupied','occupied','occupied','free','occupied','occupied','cleaning','occupied','free','occupied',
-  'occupied','free','occupied','occupied','occupied','maint','occupied','occupied','free','occupied',
-  'occupied','occupied','free','occupied','occupied','occupied','occupied','free','occupied','occupied',
-  'free','occupied','occupied','occupied','free','cleaning','occupied','occupied','occupied','occupied',
-  'occupied','free','free','occupied','occupied','occupied','free','occupied','free','occupied',
-  'occupied','occupied','occupied','free','occupied','occupied','occupied','free','free','occupied'];
-bedStates.forEach(s => {
-  const div = document.createElement('div');
-  div.className = `bed ${s}`;
-  bedsEl.appendChild(div);
-});
-
 // Nav scroll
 const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
-});
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 40));
 
 // Reveal on scroll
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.15 });
-revealEls.forEach(el => observer.observe(el));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)} });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Smooth scroll for anchor links
+// Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
   });
 });
 
-// Mobile menu toggle
-document.querySelector('.mobile-toggle').addEventListener('click', function() {
+// Mobile menu
+document.querySelector('.mobile-toggle').addEventListener('click', () => {
   const links = document.querySelector('.nav-links');
-  if (links.style.display === 'flex') {
-    links.style.display = 'none';
-  } else {
-    links.style.display = 'flex';
-    links.style.flexDirection = 'column';
-    links.style.position = 'absolute';
-    links.style.top = '72px';
-    links.style.left = '0';
-    links.style.right = '0';
-    links.style.background = 'rgba(15,25,35,0.97)';
-    links.style.padding = '1.5rem 2rem';
-    links.style.gap = '1.25rem';
-    links.style.borderBottom = '1px solid rgba(14,165,160,0.15)';
-  }
+  const open = links.style.display === 'flex';
+  Object.assign(links.style, open ? {display:'none'} : {
+    display:'flex',flexDirection:'column',position:'absolute',
+    top:'68px',left:0,right:0,
+    background:'rgba(255,255,255,0.98)',backdropFilter:'blur(20px)',
+    padding:'1.5rem 2.5rem',gap:'1.25rem',
+    borderBottom:'1px solid var(--gray-100)',
+    boxShadow:'0 8px 30px rgba(10,37,64,0.08)'
+  });
 });
+
+// Animate market bars on scroll
+const marketBars = document.querySelectorAll('.market-bar');
+const barObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.style.width = e.target.style.width; // trigger reflow
+      barObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.5});
+marketBars.forEach(b => barObserver.observe(b));
 </script>
 </body>
 </html>
